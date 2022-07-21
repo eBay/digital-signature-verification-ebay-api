@@ -1,6 +1,5 @@
 package com.ebay.signaturevalidation;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -12,7 +11,7 @@ import java.util.List;
 
 @Configuration
 public class RestTemplateConfig {
-    private SignatureInterceptor signatureInterceptor;
+    private final SignatureInterceptor signatureInterceptor;
 
     public RestTemplateConfig(SignatureInterceptor signatureInterceptor) {
         this.signatureInterceptor = signatureInterceptor;

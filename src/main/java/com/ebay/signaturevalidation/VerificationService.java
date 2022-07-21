@@ -1,10 +1,7 @@
 package com.ebay.signaturevalidation;
 
-
-import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jwt.EncryptedJWT;
 import com.nimbusds.jwt.JWTClaimsSet;
-import org.bouncycastle.crypto.CryptoException;
 import org.bouncycastle.crypto.Signer;
 import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
@@ -39,7 +36,7 @@ public class VerificationService {
 
     private final Logger logger = LoggerFactory.getLogger(VerificationService.class.getName());
 
-    private final Pattern signatureInputPattern = Pattern.compile(".*=(\\((.+)\\);created=(\\d+)(;keyid=.+)?)");
+    private final Pattern signatureInputPattern = Pattern.compile(".+=(\\((.+)\\);created=(\\d+)(;keyid=.+)?)");
     private final Pattern signaturePattern = Pattern.compile(".+=:(.+):");
     private final Pattern contentDigestPattern = Pattern.compile("(.+)=:(.+):");
 
@@ -159,7 +156,7 @@ public class VerificationService {
 
             Matcher signatureInputMatcher = signatureInputPattern.matcher(signatureInputHeader);
             if (!signatureInputMatcher.find()) {
-                throw new SignatureException("Invalid signature-input. Make sure it's of format: .*=\\(.+\\;created=\\d+)");
+                throw new SignatureException("Invalid signature-input. Make sure it's of format: .+=\\(.+\\;created=\\d+)");
             }
             String signatureInput = signatureInputMatcher.group(2).replaceAll("\"", "");
             List<String> signatureParams = List.of(signatureInput.split(" "));
@@ -222,11 +219,5 @@ public class VerificationService {
         } catch (Exception ex) {
             throw new SignatureException("Error calculating base: " + ex.getMessage(), ex);
         }
-    }
-
-
-
-    @PostConstruct
-    private void postConstruct() throws IOException {
     }
 }

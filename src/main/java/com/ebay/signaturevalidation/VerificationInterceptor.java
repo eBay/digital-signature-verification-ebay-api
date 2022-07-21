@@ -1,10 +1,8 @@
 package com.ebay.signaturevalidation;
 
-
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,5 +39,4 @@ public class VerificationInterceptor implements HandlerInterceptor {
             return false;
         }
     }
-
 }

@@ -81,13 +81,12 @@ sig1=("signature-key" "@method" "@path" "@authority");created=1658272908
 
 ### Signature Headers
 
-The value of the Signature header is created as specified in section 3.1 of the above IETF draft.
+The value of the Signature header is created as specified in [section 3.1 of the above IETF draft](https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-message-signatures#section-3.1).
 
 Depending on the used cipher, either of the following two sections applies:
 
-3.3.2.  RSASSA-PKCS1-v1_5 using SHA-256
-
-3.3.5.  EdDSA using curve edwards25519
+- [RSASSA-PKCS1-v1_5 using SHA-256](https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-message-signatures#section-3.3.2)
+- [EdDSA using curve edwards25519](https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-message-signatures#section-3.3.5)
 
 The test keys in this document are the same used in the IETF draft.
 
@@ -180,7 +179,7 @@ You can download the Docker image from TBD
 
 Start the image like this:
 ```
-docker run -it -p 8080:8080 containername
+docker run -it -p 8080:8080 signaturevalidation
 ```
 The web server will run on port 8080 on localhost.
 
@@ -195,6 +194,13 @@ curl --location --request POST 'http://localhost:8080/verifysignature' \
 --header 'Signature-Key: eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoid2pLUXlJRG9GV0dzMnlJc3RYTUpJQSIsImFsZyI6IkEyNTZHQ01LVyIsIml2IjoiamQ0NVlwZUt3dW1LWTctaCJ9.29nmN_35SIxsfE3sbKDGqDvl7ru9V7hnBcwgqtBGoRA.ZoTBJE0ghXJ1Cbaj.br8NW5IfwvNza0Mdw6Hp7WtmmOg2hy0Hu8g2F3-4Sfldah0EwIDNmS01h0c2bCTFbZFm4-Gf1GmscV36FOxTlCZoS1lLLJKOX85jaMnzRGOAsx12TDHNVBX45HpjpY1whZCAtJsB9Io6pakXzDFbnJOnY7XnAFiTCi6B80a2ym7m_ydKMo_E9DN9l6it7JeBe-MRPGl6rOqZzASCdLc-M5pNhw4X0lAw.o_kXZ7cqFTB2svr0_0aKkQ' \
 --header 'Signature: sig1=:be+6qeePqFqybT78F2368rb9MQSQAVcJDJ4Xagb6/Y7BcO8jediHwKoVAZ+NMA91A/DPZ5hgG0CnWShjZqwCBQ==:' \
 --data-raw '{"hello": "world"}'
+```
+
+## How to Compile the code and build the container;
+
+```
+./mvnw clean install
+docker build . -t signaturevalidation
 ```
 
 ## License
