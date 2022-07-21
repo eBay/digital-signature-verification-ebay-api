@@ -188,7 +188,7 @@ public class SignatureService {
             throw new SignatureException("Error calculating signature base: " + ex.getMessage(), ex);
         }
     }
-    s
+
     @PostConstruct
     private void postConstruct() throws SignatureException {
         KeyPair keyPair = keypairService.loadExistingKeyPair();

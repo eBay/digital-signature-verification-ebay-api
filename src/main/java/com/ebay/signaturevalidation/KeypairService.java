@@ -82,7 +82,6 @@ public class KeypairService {
                     .issueTime(now)
                     .jwtID(UUID.randomUUID().toString())
                     .claim("appid", "app1") // this is set to the appId
-                    .claim("pkid", "app1_key1") // concatenation of app ID and incrementing number
                     .claim("pkey", new String(Base64.encode(publicKey.getEncoded()))) // public ed25519 key
                     .build();
 
