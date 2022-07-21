@@ -194,3 +194,6 @@ curl --location --request POST 'http://localhost:8080/verifysignature' \
 --header 'Signature: sig1=:be+6qeePqFqybT78F2368rb9MQSQAVcJDJ4Xagb6/Y7BcO8jediHwKoVAZ+NMA91A/DPZ5hgG0CnWShjZqwCBQ==:' \
 --data-raw '{"hello": "world"}'
 ```
+
+## License
+[Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
