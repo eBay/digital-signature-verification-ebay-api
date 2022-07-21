@@ -48,20 +48,12 @@ public class VerificationService {
     }
 
 
-    public boolean verifyMessage(String body, Map<String, String> headers, URI uri, String method) {
-        try {
-            String base = calculateBase(headers, uri, method);
-            PublicKey publicKey = verifyJWT(headers);
-            verifyDigestHeader(body, headers);
-            verifySignature(publicKey, base, headers);
-            logger.info("Message signature verified");
-            return true;
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            logger.error("Message signature invalid: " + ex.getMessage());
-            return false;
-        }
+    public void verifyMessage(String body, Map<String, String> headers, URI uri, String method) throws SignatureException {
+        String base = calculateBase(headers, uri, method);
+        PublicKey publicKey = verifyJWT(headers);
+        verifyDigestHeader(body, headers);
+        verifySignature(publicKey, base, headers);
+        logger.info("Message signature verified");
     }
 
     private PublicKey verifyJWT(Map<String, String> headers) throws SignatureException {
@@ -152,6 +144,10 @@ public class VerificationService {
     private String calculateBase(Map<String, String> headers, URI uri, String method) throws SignatureException {
         try {
             String signatureInputHeader = headers.get("signature-input");
+            if (!headers.containsKey("signature-input")) {
+                throw new SignatureException("Signature-Input header missing");
+            }
+
             Matcher signatureInputMatcher = signatureInputPattern.matcher(signatureInputHeader);
             if (!signatureInputMatcher.find()) {
                 throw new SignatureException("Invalid signature-input");

@@ -8,6 +8,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.net.URI;
 import java.util.Collections;
 import java.util.Map;
@@ -30,11 +31,15 @@ public class VerificationInterceptor implements HandlerInterceptor {
             Map<String, String> headers = Collections.list(request.getHeaderNames())
                     .stream()
                     .collect(Collectors.toMap(String::toLowerCase, request::getHeader));
-            return verificationService.verifyMessage(body, headers, uri, request.getMethod());
+            verificationService.verifyMessage(body, headers, uri, request.getMethod());
+
+            return true;
         } catch (Exception ex) {
+            response.getWriter().write(ex.getMessage());
+            response.setStatus(403);
+
             return false;
         }
     }
-
 
 }
