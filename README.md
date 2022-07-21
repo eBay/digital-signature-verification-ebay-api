@@ -1,11 +1,11 @@
-Digital Signatures for Public API Calls
+# Digital Signatures for Public API Calls
 
-Overview
+## Overview
 
 Due to regulatory requirements for our European/UK sellers, we are requiring our developers to add a digital signature for every HTTP call that is made on behalf of a EU/UK seller to certain APIs. This document specifies the way the signature is created and added to an HTTP message.
 
 
-APIs in Scope
+## APIs in Scope
 
 Signatures only need to be added when the call is made on behalf of a seller who is domiciled in the EU or the UK, and only for the following APIs:
 
@@ -29,7 +29,7 @@ That said, it is entirely acceptable to include the signature for other APIs and
 
 
 
-Creating a Message Signature
+## Creating a Message Signature
 
 The signature scheme is compliant with these upcoming IETF standards (currently not yet RFCs):
 https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-11.html
@@ -44,7 +44,7 @@ Signature-Input: This header indicates which headers and pseudo-headers and in w
 Signature: This headers includes the actual signature
 
 
-Content-Digest Header
+### Content-Digest Header
 This step can be skipped if there is payload in the HTTP message (e.g., for a GET call).
 
 To add the Content-Digest header (specified in https://www.ietf.org/archive/id/draft-ietf-httpbis-digest-headers-10.html), calculate a SHA-256 digest over the HTTP payload (in UTF-8 character encoding). While the specification allows to add more than one digest (e.g., both SHA-256 and SHA-512), only the SHA-256 is needed in our case.
@@ -58,7 +58,7 @@ The value of the Content-Digest header will be:
 sha-256=:X48E9qOokqqrvdts8nOJRJN3OWDUoyWxBf7kbu9DBPE=:
 
 
-Signature-Key Header
+### Signature-Key Header
 The “Signature-Key” header always contains the JWE that is provided via the developer portal for this application (or the test JWE above for testing purposes on the sandbox). For example (there wouldn’t be any line-breaks):
 
 Signature-Key:  eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoiTjZIc2ItenlIXzZ4blFHQUhOdHByZyIsImFsZyI6IkEyNTZHQ01LVyIsIml2IjoiNjQ1Z0Rzc2lOYUZFb2pOWCJ9.rSWQSIKGgu_gAhLdG87fIpRYyI57KMQKYJpgQoXhPso.jvrOE0g2Q7A8h_Rj.uZsaA0VaVjL9HiciAilnNsos7Da-Fx5W3tr9sZO4qSPD-hB9t-lacy96lyeLiixs0nHXZ21iEwFYkqOllxpqW6eyJPb6lLDrnzg8Nx5AvizLagSDT35_3xBTu6EWf6x-lWBMKiBj8zo31wdjaGWMExcaQSPpwZxbJ3Z1sM4aZmHX7sjjnIT0V9kH1kAj0kD7uGuJ8KlMvrl011z68kJt-ilYG4FZn_Z5.CZzMDhEn1jqL45bYvbO3ig
@@ -76,7 +76,7 @@ If no payload is included in the HTTP message, the header would be:
 sig1=("signature-key" "@method" "@path" "@authority");created=1658272908
 
 
-Signature Headers
+### Signature Headers
 
 The value of the Signature header is created as specified in section 3.1 of the above IETF draft.
 
@@ -88,7 +88,7 @@ Depending on the used cipher, either of the following two sections applies:
 
 The test keys in this document are the same used in the IETF draft.
 
-How to Test the Signature Mechanism
+## How to Test the Signature Mechanism
 
 eBay will soon provide testing capabilities on our Sandbox environment. We will send out communication once that is available. In the meantime, we provide you a Docker container with a web server that will let you test your signature creation. This process is described in the following.
 Key Material
@@ -150,7 +150,7 @@ PSXSfBDiUGhwOw76WuSSsf1D4b/vLoJ10wIDAQAB
 Public Key (as JWE)
 eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoiNkVsOXpnRDFucXdZM3hFbVRxZF9fQSIsImFsZyI6IkEyNTZHQ01LVyIsIml2IjoiekNXb3VjdG9RS1BHdUFLUiJ9.WKL0SaLrtDuqR8p9gBqPiNPcBHy6dF7uBwwPpOzohl8.borDwB3dYfFwnan8.MjhmMnjGK4JMq_CegEJRoL036nqe901LTuioKtFgWB-5pqixsWRpHFLhXkXCCnhYlIsN1GhMP46nvVYYuT92wuwPhqw4wnmBcuku4KReQMw835nL6EbDAb3RZBA738qufPOJSXwN0yIllq8B6h9MCRnIiVDY3YTvAFp4K19aFsJO3_mTVxYAvoJgFRjlNS5j7GcPSfUZvpwHcydRlVmAUFzD_kOP5TLNJHnGpXTrnaF8qkDRr7qnasgASTUTOsju8CouRPmhx98ikzoZUt_Yrre0oYE371kFeaY8afwmXz0hS_7AEcGOW7wQw9A2889nsSVvTe3oMQtXKyANsPWeyP4HG9P_Wyy45pqTJueWB932QNZutPVUlvzJAjOoT5jvpV_4dDs2YVYsu7JlqLiDvE9RpXc9unjGtN25CPfZh1y3KlFriSSxpu9FDFLhZ0EjqpYjIUZpMivWA0yRDVJnpUtN3w8v0hF7y7xaXi6eoa7LO9bgGtNbpOCdm4HP4eOw1f7JEz7VdTNOq_GLxF6SUxN_eOVvbZiu4aGN87oqexYG5dnp6jkAVSaXVlRJ.5r-m8I-KMgaW0Wsy-q3r2Q
 
-Setting up the verification framework
+## Setting up the verification framework
 
 You can download the Docker image from TBD
 
