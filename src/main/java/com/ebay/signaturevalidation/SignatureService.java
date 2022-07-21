@@ -44,7 +44,7 @@ public class SignatureService {
     }
 
 
-    public void signMessage(HttpRequest request, byte[] body) throws IOException, NoSuchAlgorithmException, SignatureException, CryptoException {
+    public void signMessage(HttpRequest request, byte[] body) throws SignatureException {
         addDigestHeader(request, body);
         addSignatureKeyHeader(request, jwt);
         addSignatureHeaders(request);
@@ -52,127 +52,147 @@ public class SignatureService {
         logger.info("Message signed");
     }
 
-    private void addSignatureHeaders(HttpRequest request) throws IOException, SignatureException, CryptoException {
+    private void addSignatureHeaders(HttpRequest request) throws SignatureException {
         String signature = getSignatureValue(request);
 
-        HttpHeaders headers = request.getHeaders();
-        headers.add("Signature", "sig1=:" + signature + ":");
-        headers.add("Signature-Input", "sig1=" + signatureInput);
-        logger.info("signature: {}", headers.get("Signature"));
-    }
-
-    private void addDigestHeader(HttpRequest request, byte[] body) throws NoSuchAlgorithmException {
-        HttpHeaders headers = request.getHeaders();
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        String digestString = "sha-256=:" + new String(Base64.encode(digest.digest(body))) + ":";
-
-        headers.put("Content-digest", List.of(digestString));
-    }
-
-    private void addSignatureKeyHeader(HttpRequest request, String jwt) {
-        HttpHeaders headers = request.getHeaders();
-        headers.put("Signature-key", List.of(jwt));
-    }
-
-    private String getSignatureValue(HttpRequest request) throws IOException, SignatureException, CryptoException {
-        String baseString = calculateBase(request);
-        byte[] base = baseString.getBytes(StandardCharsets.UTF_8);
-
-        Signer signer;
-        if (keypairService.getAlgorithm().equals("RSA")) {
-            signer = new RSADigestSigner(new SHA256Digest());
-        } else {
-            signer = new Ed25519Signer();
+        try {
+            HttpHeaders headers = request.getHeaders();
+            headers.add("Signature", "sig1=:" + signature + ":");
+            headers.add("Signature-Input", "sig1=" + signatureInput);
+            logger.info("signature: {}", headers.get("Signature"));
+        } catch (Exception ex) {
+            throw new SignatureException("Error adding Signature and Signature-Input headers: " + ex.getMessage(), ex);
         }
-        AsymmetricKeyParameter privateKeyParameters =  PrivateKeyFactory.createKey(privateKey.getEncoded());
-        signer.init(true, privateKeyParameters);
-        signer.update(base, 0, base.length);
-        byte[] signature = signer.generateSignature();
+    }
 
-        return new String(Base64.encode(signature));
+    private void addDigestHeader(HttpRequest request, byte[] body) throws SignatureException {
+        try {
+            HttpHeaders headers = request.getHeaders();
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            String digestString = "sha-256=:" + new String(Base64.encode(digest.digest(body))) + ":";
+
+            headers.put("Content-digest", List.of(digestString));
+        } catch (Exception ex) {
+            throw new SignatureException("Error adding Content-Digest header: " + ex.getMessage(), ex);
+        }
+    }
+
+    private void addSignatureKeyHeader(HttpRequest request, String jwt) throws SignatureException {
+        try {
+            HttpHeaders headers = request.getHeaders();
+            headers.put("Signature-key", List.of(jwt));
+        } catch (Exception ex) {
+            throw new SignatureException("Error adding Signature-Key header: " + ex.getMessage(), ex);
+        }
+    }
+
+    private String getSignatureValue(HttpRequest request) throws SignatureException {
+        try {
+            String baseString = calculateBase(request);
+            byte[] base = baseString.getBytes(StandardCharsets.UTF_8);
+
+            Signer signer;
+            if (keypairService.getAlgorithm().equals("RSA")) {
+                signer = new RSADigestSigner(new SHA256Digest());
+            } else {
+                signer = new Ed25519Signer();
+            }
+            AsymmetricKeyParameter privateKeyParameters = PrivateKeyFactory.createKey(privateKey.getEncoded());
+            signer.init(true, privateKeyParameters);
+            signer.update(base, 0, base.length);
+            byte[] signature = signer.generateSignature();
+
+            return new String(Base64.encode(signature));
+        } catch (CryptoException | IOException ex) {
+            throw new SignatureException("Error creating value for signature: " + ex.getMessage(), ex);
+        }
     }
 
     private String calculateBase(HttpRequest request) throws SignatureException {
-        StringBuilder buf = new StringBuilder();
-        HttpHeaders headers = request.getHeaders();
+        try {
+            StringBuilder buf = new StringBuilder();
+            HttpHeaders headers = request.getHeaders();
 
-        for (String header : signatureParams) {
-            buf.append("\"");
-            buf.append(header.toLowerCase());
-            buf.append("\": ");
+            for (String header : signatureParams) {
+                buf.append("\"");
+                buf.append(header.toLowerCase());
+                buf.append("\": ");
 
-            if (header.startsWith("@")) {
-                switch (header.toLowerCase()) {
-                    case "@method":
-                        buf.append(request.getMethod());
-                        break;
-                    case "@authority":
-                        buf.append(request.getURI().getAuthority());
-                        break;
-                    case "@target-uri":
-                        buf.append(request.getURI());
-                        break;
-                    case "@scheme":
-                        buf.append(request.getURI().getScheme());
-                        break;
+                if (header.startsWith("@")) {
+                    switch (header.toLowerCase()) {
+                        case "@method":
+                            buf.append(request.getMethod());
+                            break;
+                        case "@authority":
+                            buf.append(request.getURI().getAuthority());
+                            break;
+                        case "@target-uri":
+                            buf.append(request.getURI());
+                            break;
+                        case "@scheme":
+                            buf.append(request.getURI().getScheme());
+                            break;
 //                    case "@request-target":
 //                        // TBD
 //                        break;
-                    case "@path":
-                        buf.append(request.getURI().getPath());
-                        break;
-                    case "@query":
-                        buf.append(request.getURI().getQuery());
-                        break;
+                        case "@path":
+                            buf.append(request.getURI().getPath());
+                            break;
+                        case "@query":
+                            buf.append(request.getURI().getQuery());
+                            break;
 //                    case "@query-param":
 //                        // TBD
 //                        break;
 //                    case "@status":
 //                        // TBD
 //                        break;
-                    default:
-                        throw new SignatureException("Unknown pseudo header " + header);
-                }
-            } else {
-                if (!headers.containsKey(header)) {
-                    throw new SignatureException("Header " + header + " not included in message");
+                        default:
+                            throw new SignatureException("Unknown pseudo header " + header);
+                    }
+                } else {
+                    if (!headers.containsKey(header)) {
+                        throw new SignatureException("Header " + header + " not included in message");
+                    }
+
+                    buf.append(headers.get(header).get(0));
                 }
 
-                buf.append(headers.get(header).get(0));
+                buf.append("\n");
             }
 
-            buf.append("\n");
-        }
+            buf.append("\"@signature-params\": ");
 
-        buf.append("\"@signature-params\": ");
+            signatureInput = "";
+            StringBuilder signatureInputBuf = new StringBuilder();
+            signatureInputBuf.append("(");
 
-        signatureInput = "";
-        StringBuilder signatureInputBuf = new StringBuilder();
-        signatureInputBuf.append("(");
-
-        for (int i = 0; i < signatureParams.size(); i++) {
-            String param = signatureParams.get(i);
-            signatureInputBuf.append("\"");
-            signatureInputBuf.append(param);
-            signatureInputBuf.append("\"");
-            if (i < signatureParams.size() - 1) {
-                signatureInputBuf.append(" ");
+            for (int i = 0; i < signatureParams.size(); i++) {
+                String param = signatureParams.get(i);
+                signatureInputBuf.append("\"");
+                signatureInputBuf.append(param);
+                signatureInputBuf.append("\"");
+                if (i < signatureParams.size() - 1) {
+                    signatureInputBuf.append(" ");
+                }
             }
+
+            signatureInputBuf.append(");created=");
+            signatureInputBuf.append(Instant.now().getEpochSecond());
+            signatureInput = signatureInputBuf.toString();
+
+            buf.append(signatureInput);
+
+            return buf.toString();
+        } catch (Exception ex) {
+            throw new SignatureException("Error calculating signature base: " + ex.getMessage(), ex);
         }
-
-        signatureInputBuf.append(");created=");
-        signatureInputBuf.append(Instant.now().getEpochSecond());
-        signatureInput = signatureInputBuf.toString();
-
-        buf.append(signatureInput);
-
-        return buf.toString();
     }
 
 
 
     @PostConstruct
-    private void postConstruct() throws IOException, JOSEException {
+    private void postConstruct() throws SignatureException {
         KeyPair keyPair = keypairService.loadExistingKeyPair();
         this.privateKey = keyPair.getPrivate();
         this.publicKey = keyPair.getPublic();

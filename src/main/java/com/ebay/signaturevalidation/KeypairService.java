@@ -40,79 +40,89 @@ public class KeypairService {
     private final String algorithm = EdDSAParameterSpec.Ed25519;
 //    private String algorithm = "RSA";
 
-    public KeypairService() throws KeyLengthException, IOException {
-        Path masterkeyPath = Path.of(KEYS_FOLDER + "masterkey.key");
-        String secretKeyBase64 = Files.readString(masterkeyPath);
-        final byte[] secretKey = Base64.decode(secretKeyBase64);
+    public KeypairService() throws SignatureException {
+        try {
+            Path masterkeyPath = Path.of(KEYS_FOLDER + "masterkey.key");
+            String secretKeyBase64 = Files.readString(masterkeyPath);
+            final byte[] secretKey = Base64.decode(secretKeyBase64);
 
-        jweEncrypter = new AESEncrypter(secretKey);
-        jweDecrypter = new AESDecrypter(secretKey);
+            jweEncrypter = new AESEncrypter(secretKey);
+            jweDecrypter = new AESDecrypter(secretKey);
+        } catch (IOException | KeyLengthException ex) {
+            throw new SignatureException("Error loading master key: " + ex.getMessage(), ex);
+        }
     }
 
-    public EncryptedJWT decryptJWE(String jweString) throws ParseException, JOSEException {
-        EncryptedJWT jwe = EncryptedJWT.parse(jweString);
-        jwe.decrypt(jweDecrypter);
-
-        return jwe;
+    public EncryptedJWT decryptJWE(String jweString) throws SignatureException {
+        try {
+            EncryptedJWT jwe = EncryptedJWT.parse(jweString);
+            jwe.decrypt(jweDecrypter);
+            return jwe;
+        } catch (ParseException | JOSEException ex) {
+            throw new SignatureException("Error decrypting the JWE from Signature-Key header", ex);
+        }
     }
 
-    public KeyPair loadExistingKeyPair() throws IOException {
+    public KeyPair loadExistingKeyPair() throws SignatureException {
         String algoFolder = algorithm.toLowerCase();
         PrivateKey privateKey = readPrivateKey(KEYS_FOLDER + algoFolder + "/privatekey.pem");
         PublicKey publicKey = readPublicKey(KEYS_FOLDER + algoFolder + "/publickey.pem");
-        KeyPair pair = new KeyPair(publicKey, privateKey);
-
-        return pair;
+        return new KeyPair(publicKey, privateKey);
     }
 
 
-    public String getJWE(PublicKey publicKey) throws JOSEException {
+    public String getJWE(PublicKey publicKey) throws SignatureException {
+        try {
+            // Compose the JWT claims set
+            Date now = new Date();
 
-        // Compose the JWT claims set
-        Date now = new Date();
+            JWTClaimsSet jwtClaims = new JWTClaimsSet.Builder()
+                    .expirationTime(new Date(now.getTime() + 1000L * 60 * 60 * 24 * 365 * 10)) // expires in 3 years
+                    .notBeforeTime(now)
+                    .issueTime(now)
+                    .jwtID(UUID.randomUUID().toString())
+                    .claim("appid", "app1") // this is set to the appId
+                    .claim("pkid", "app1_key1") // concatenation of app ID and incrementing number
+                    .claim("pkey", new String(Base64.encode(publicKey.getEncoded()))) // public ed25519 key
+                    .build();
 
-        JWTClaimsSet jwtClaims = new JWTClaimsSet.Builder()
-                .expirationTime(new Date(now.getTime() + 1000L *60*60*24*365*10)) // expires in 3 years
-                .notBeforeTime(now)
-                .issueTime(now)
-                .jwtID(UUID.randomUUID().toString())
-                .claim("appid", "app1") // this is set to the appId
-                .claim("pkid", "app1_key1") // concatenation of app ID and incrementing number
-                .claim("pkey", new String(Base64.encode(publicKey.getEncoded()))) // public ed25519 key
-                .build();
+            logger.info("Claims: {}", jwtClaims.toJSONObject());
 
-        logger.info("Claims: {}", jwtClaims.toJSONObject());
-
-        // Request JWT encrypted with DIR and 256-bit AES/GCM
-        JWEHeader header = new JWEHeader.Builder(JWEAlgorithm.A256GCMKW, EncryptionMethod.A256GCM)
-                .compressionAlgorithm(CompressionAlgorithm.DEF)
-                .build();
+            // Request JWT encrypted with DIR and 256-bit AES/GCM
+            JWEHeader header = new JWEHeader.Builder(JWEAlgorithm.A256GCMKW, EncryptionMethod.A256GCM)
+                    .compressionAlgorithm(CompressionAlgorithm.DEF)
+                    .build();
 
 
-        // Create the encrypted JWT object
-        EncryptedJWT jwt = new EncryptedJWT(header, jwtClaims);
+            // Create the encrypted JWT object
+            EncryptedJWT jwt = new EncryptedJWT(header, jwtClaims);
 
-        // Do the actual encryption
-        jwt.encrypt(jweEncrypter);
+            // Do the actual encryption
+            jwt.encrypt(jweEncrypter);
 
-        // Serialise to JWT compact form
-        String jwtString = jwt.serialize();
-        logger.info("JWT length: {}; content: {}", jwtString.length(), jwtString);
+            // Serialise to JWT compact form
+            String jwtString = jwt.serialize();
+            logger.info("JWT length: {}; content: {}", jwtString.length(), jwtString);
 
-        return jwtString;
+            return jwtString;
+        } catch (JOSEException ex) {
+            throw new SignatureException("Error creating JWE: " + ex.getMessage(), ex);
+        }
 
     }
 
-    private PublicKey readPublicKey(String file) throws IOException {
+    private PublicKey readPublicKey(String file) throws SignatureException {
         try (FileReader keyReader = new FileReader(file)) {
             PEMParser pemParser = new PEMParser(keyReader);
             JcaPEMKeyConverter converter = new JcaPEMKeyConverter();
             SubjectPublicKeyInfo publicKeyInfo = SubjectPublicKeyInfo.getInstance(pemParser.readObject());
             return converter.getPublicKey(publicKeyInfo);
+        } catch (IOException ex) {
+            throw new SignatureException("Error loading public key: " + ex.getMessage(), ex);
         }
     }
 
-    public PrivateKey readPrivateKey(String file) throws IOException {
+    public PrivateKey readPrivateKey(String file) throws SignatureException {
         try (FileReader keyReader = new FileReader(file)) {
 
             PEMParser pemParser = new PEMParser(keyReader);
@@ -120,6 +130,8 @@ public class KeypairService {
             PrivateKeyInfo privateKeyInfo = PrivateKeyInfo.getInstance(pemParser.readObject());
 
             return converter.getPrivateKey(privateKeyInfo);
+        } catch (IOException ex) {
+            throw new SignatureException("Error loading private key: " + ex.getMessage(), ex);
         }
     }
 
