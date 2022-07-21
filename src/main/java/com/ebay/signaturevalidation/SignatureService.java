@@ -75,7 +75,6 @@ public class SignatureService {
     }
 
     private String getSignatureValue(HttpRequest request) throws IOException, SignatureException, CryptoException {
-        HttpHeaders headers = request.getHeaders();
         String baseString = calculateBase(request);
         byte[] base = baseString.getBytes(StandardCharsets.UTF_8);
 
@@ -139,7 +138,7 @@ public class SignatureService {
                     throw new SignatureException("Header " + header + " not included in message");
                 }
 
-                buf.append(headers.get(header));
+                buf.append(headers.get(header).get(0));
             }
 
             buf.append("\n");
