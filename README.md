@@ -118,7 +118,7 @@ MCowBQYDK2VwAyEAJrQLj5P/89iXES9+vFgrIy29clF9CC/oPPsw3c5D0bs=
 
 ##### Public Key (as JWE)
 ```
-eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoiekpXRHZwVnFCM0RUQVhUU3d3czBGdyIsImFsZyI6IkEyNTZHQ01LVyIsIml2IjoiMnhLMTNvRndrQzdtRXVKWiJ9.oSfPshaVhO9yMGvbZh-ZPBPwNoVI-8CjJvw2pBCZVwQ.Dii_DE7wsQMpUwDn.3fyF3DGsrG7UgVRY5Gg-vvXXTRg6Wvl9c6c_xN1p1qfGAl6_UouKB0_kl7h9Doru866rJ-N6G0YqGl9v-PxdeA1vThjt53ECFpbxZlNoH_mToaIlB2B5q0N25LYgJ8GTJejgWfH0FYwYuqb7C845JmEWCYvbMfaTh9UwE7hICESPBSLxiuq0NWB1d46GfmP-7SvELc53WXvQe0fe-up_PyacTPfWWThN.eG335bG5AStxBSWgFnjlsA
+eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoidVNpNmxTZXZoUGI4Q25IYnRhcnBGZyIsImFsZyI6IkEyNTZHQ01LVyIsIml2Ijoiem5LU3VQSk5PZHY3M1htLSJ9.Thr5sk5JShOXcwduqsnSpBBZFyu2PAgKhSr4psrAjBk.Sv7fUpuUCBOePabZ.YIjcmQV-cRGs5-nm53b61kjxxRJ_3esKWUlVYI4D8orspqcyXe5CqJ4bKAtTDSRNr0exv10fHnpmcVt6YQF1GT9BV9uuisWpfWO4q49Q66HJV3uKdqklRBqWvrGuzpLmfeDGx1t_D9bKkGORT6QMFDgNkxdTmy2tOuwAvrUiB5KZyGQOvuq9PCtsUT3ldNd1sdKM7-GvFxpQMEg3RhSBGu4.zZiqofr6SncKLc0lhPCDXQ
 ```
 
 #### RSA
@@ -170,7 +170,7 @@ aOT9v6d+nb4bnNkQVklLQ3fVAvJm+xdDOp9LCNCN48V2pnDOkFV6+U9nV5oyc6XI
 
 ##### Public Key (as JWE)
 ```
-eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoiNkVsOXpnRDFucXdZM3hFbVRxZF9fQSIsImFsZyI6IkEyNTZHQ01LVyIsIml2IjoiekNXb3VjdG9RS1BHdUFLUiJ9.WKL0SaLrtDuqR8p9gBqPiNPcBHy6dF7uBwwPpOzohl8.borDwB3dYfFwnan8.MjhmMnjGK4JMq_CegEJRoL036nqe901LTuioKtFgWB-5pqixsWRpHFLhXkXCCnhYlIsN1GhMP46nvVYYuT92wuwPhqw4wnmBcuku4KReQMw835nL6EbDAb3RZBA738qufPOJSXwN0yIllq8B6h9MCRnIiVDY3YTvAFp4K19aFsJO3_mTVxYAvoJgFRjlNS5j7GcPSfUZvpwHcydRlVmAUFzD_kOP5TLNJHnGpXTrnaF8qkDRr7qnasgASTUTOsju8CouRPmhx98ikzoZUt_Yrre0oYE371kFeaY8afwmXz0hS_7AEcGOW7wQw9A2889nsSVvTe3oMQtXKyANsPWeyP4HG9P_Wyy45pqTJueWB932QNZutPVUlvzJAjOoT5jvpV_4dDs2YVYsu7JlqLiDvE9RpXc9unjGtN25CPfZh1y3KlFriSSxpu9FDFLhZ0EjqpYjIUZpMivWA0yRDVJnpUtN3w8v0hF7y7xaXi6eoa7LO9bgGtNbpOCdm4HP4eOw1f7JEz7VdTNOq_GLxF6SUxN_eOVvbZiu4aGN87oqexYG5dnp6jkAVSaXVlRJ.5r-m8I-KMgaW0Wsy-q3r2Q
+eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoiQlh3VVljQ1MyRHBEeW4xanNrSUVrQSIsImFsZyI6IkEyNTZHQ01LVyIsIml2IjoiSFlKZV9pX1JvX3dEVFRjeSJ9.mzzNmEYVENteXFyYGwOuIjDcRDBsMrEm_g43Lv7-oWU.-XI55qpQSn1SKgE8.bIFK9LmDVbo119VibK9dAHhRIzXs58HfyJMCoc9bwU6WEZlRo7E_PwPge3npGP9a4IcQH1VD4uO7_J0XbJvv9IaakVMJ4D8Hzh9dBetuwkY3zZ00ObE9KcVNA4iHdalQ4jYkZboabWTtQDqQjIf19sgbBwXAEoLkHruJAbdPWflqfqQ4VTeP3Az6Q9wDhEKAWLNyKWIbN8DCTPlTJa_DzJDwvQhyYVDqD0rg8fnaq4KAXFGrk-l2ztbEQEkylzqTrRu-6g_5WGdihfL9YG2jtdmU3YJwr46SLDJvc4RixzUsf2URbxoWvKDGEGit4h1vnBykeXA3jp90Kk7aAa-7h6ZLi1ajMWAG65ph6lZUeXqLdKeHR-NCuonOrI9_cjFbhVn7AY1Slq0jxrA7Ws2QL4LRulo6RZVe21IaicoDEpa6RtNAg9FDzQfNa2ke16c4RGOI0cWxsvfX8fygzRyQM7N-ODC0Gkm5Ip4ikmdJEY8ovN3LSPXCMdWxqVAw9X_LMFjo1X2_XCycigKXnrZrBA7L3-czGXUq8SWfuqm_RLN4.VE2ryVxII2YFuD65f35opg
 ```
 
 ## Setting up the verification framework
@@ -183,20 +183,24 @@ docker run -it -p 8080:8080 signaturevalidation
 ```
 The web server will run on port 8080 on localhost.
 
-## Testing it
+## Testing a Signature
 
 You can use Postman or curl (or any application that you implemented) to test the local verification web server. Here is a valid sample based on the above keys.
 ```
 curl --location --request POST 'http://localhost:8080/verifysignature' \
 --header 'Content-Type: application/json' \
---header 'Signature-Input: sig1=("content-digest" "signature-key" "@method" "@path" "@authority");created=1658429434' \
+--header 'Signature-Input: sig1=("content-digest" "signature-key" "@method" "@path" "@authority");created=1658440308' \
 --header 'Content-Digest: sha-256=:X48E9qOokqqrvdts8nOJRJN3OWDUoyWxBf7kbu9DBPE=:' \
---header 'Signature-Key: eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoid2pLUXlJRG9GV0dzMnlJc3RYTUpJQSIsImFsZyI6IkEyNTZHQ01LVyIsIml2IjoiamQ0NVlwZUt3dW1LWTctaCJ9.29nmN_35SIxsfE3sbKDGqDvl7ru9V7hnBcwgqtBGoRA.ZoTBJE0ghXJ1Cbaj.br8NW5IfwvNza0Mdw6Hp7WtmmOg2hy0Hu8g2F3-4Sfldah0EwIDNmS01h0c2bCTFbZFm4-Gf1GmscV36FOxTlCZoS1lLLJKOX85jaMnzRGOAsx12TDHNVBX45HpjpY1whZCAtJsB9Io6pakXzDFbnJOnY7XnAFiTCi6B80a2ym7m_ydKMo_E9DN9l6it7JeBe-MRPGl6rOqZzASCdLc-M5pNhw4X0lAw.o_kXZ7cqFTB2svr0_0aKkQ' \
---header 'Signature: sig1=:be+6qeePqFqybT78F2368rb9MQSQAVcJDJ4Xagb6/Y7BcO8jediHwKoVAZ+NMA91A/DPZ5hgG0CnWShjZqwCBQ==:' \
+--header 'Signature: sig1=:61GTr30Cc/xU+GLHBJad2/nuJNXe0VlWVIGG00djkOCGoVAvz1Xj0+ANrjOQYgueG9PuaayhH4ffrSlqxal1CQ==:' \
+--header 'Signature-Key: eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoidVNpNmxTZXZoUGI4Q25IYnRhcnBGZyIsImFsZyI6IkEyNTZHQ01LVyIsIml2Ijoiem5LU3VQSk5PZHY3M1htLSJ9.Thr5sk5JShOXcwduqsnSpBBZFyu2PAgKhSr4psrAjBk.Sv7fUpuUCBOePabZ.YIjcmQV-cRGs5-nm53b61kjxxRJ_3esKWUlVYI4D8orspqcyXe5CqJ4bKAtTDSRNr0exv10fHnpmcVt6YQF1GT9BV9uuisWpfWO4q49Q66HJV3uKdqklRBqWvrGuzpLmfeDGx1t_D9bKkGORT6QMFDgNkxdTmy2tOuwAvrUiB5KZyGQOvuq9PCtsUT3ldNd1sdKM7-GvFxpQMEg3RhSBGu4.zZiqofr6SncKLc0lhPCDXQ' \
 --data-raw '{"hello": "world"}'
 ```
 
-## How to Compile the code and build the container;
+## Integration Test
+
+You can run an integration test that will add a signature to an HTTP message in ApplicationTestsIT.java
+
+## How to Compile the Code and Build the Container;
 
 ```
 ./mvnw clean install
