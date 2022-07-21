@@ -86,7 +86,7 @@ public class KeypairService {
                     .claim("pkey", new String(Base64.encode(publicKey.getEncoded()))) // public ed25519 key
                     .build();
 
-            logger.info("Claims: {}", jwtClaims.toJSONObject());
+//            logger.info("Claims: {}", jwtClaims.toJSONObject());
 
             // Request JWT encrypted with DIR and 256-bit AES/GCM
             JWEHeader header = new JWEHeader.Builder(JWEAlgorithm.A256GCMKW, EncryptionMethod.A256GCM)
@@ -102,7 +102,7 @@ public class KeypairService {
 
             // Serialise to JWT compact form
             String jwtString = jwt.serialize();
-            logger.info("JWT length: {}; content: {}", jwtString.length(), jwtString);
+//            logger.info("JWT length: {}; content: {}", jwtString.length(), jwtString);
 
             return jwtString;
         } catch (JOSEException ex) {

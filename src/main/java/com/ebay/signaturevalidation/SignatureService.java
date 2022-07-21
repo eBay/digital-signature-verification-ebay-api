@@ -59,7 +59,7 @@ public class SignatureService {
             HttpHeaders headers = request.getHeaders();
             headers.add("Signature", "sig1=:" + signature + ":");
             headers.add("Signature-Input", "sig1=" + signatureInput);
-            logger.info("signature: {}", headers.get("Signature"));
+//            logger.info("signature: {}", headers.get("Signature"));
         } catch (Exception ex) {
             throw new SignatureException("Error adding Signature and Signature-Input headers: " + ex.getMessage(), ex);
         }
