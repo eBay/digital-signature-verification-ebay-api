@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ebay.signaturevalidation</groupId>
-	<artifactId>spring-boot</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>spring-boot</name>
-	<description>Demo project for Spring Boot</description>
+	<artifactId>signaturevalidation</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<name>signaturevalidation</name>
+	<description>POC to validate signatures for DECO APIs</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>

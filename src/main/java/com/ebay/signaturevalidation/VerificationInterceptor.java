@@ -8,7 +8,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.net.URI;
 import java.util.Collections;
 import java.util.Map;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 @Component
 public class VerificationInterceptor implements HandlerInterceptor {
 
-    private VerificationService verificationService;
+    private final VerificationService verificationService;
 
     public VerificationInterceptor(VerificationService verificationService) {
         this.verificationService = verificationService;
@@ -35,6 +34,7 @@ public class VerificationInterceptor implements HandlerInterceptor {
 
             return true;
         } catch (Exception ex) {
+            ex.printStackTrace();
             response.getWriter().write(ex.getMessage());
             response.setStatus(403);
 

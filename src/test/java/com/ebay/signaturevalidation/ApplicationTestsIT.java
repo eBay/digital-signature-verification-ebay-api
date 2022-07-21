@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest(classes = {Application.class, RestTemplate.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = {Application.class, RestTemplate.class}, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class ApplicationTestsIT {
 
 	@Autowired

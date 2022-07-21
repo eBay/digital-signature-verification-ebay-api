@@ -4,6 +4,7 @@ package com.ebay.signaturevalidation;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jwt.EncryptedJWT;
 import com.nimbusds.jwt.JWTClaimsSet;
+import org.bouncycastle.crypto.CryptoException;
 import org.bouncycastle.crypto.Signer;
 import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
@@ -39,8 +40,8 @@ public class VerificationService {
     private final Logger logger = LoggerFactory.getLogger(VerificationService.class.getName());
 
     private final Pattern signatureInputPattern = Pattern.compile(".*=(\\((.+)\\);created=(\\d+)(;keyid=.+)?)");
-    private final Pattern signaturePattern = Pattern.compile(".*=:(.+):");
-    private final Pattern contentDigestPattern = Pattern.compile("(.*)=:(.+):");
+    private final Pattern signaturePattern = Pattern.compile(".+=:(.+):");
+    private final Pattern contentDigestPattern = Pattern.compile("(.+)=:(.+):");
 
 
     public VerificationService(KeypairService keypairService) {
@@ -99,7 +100,7 @@ public class VerificationService {
             String newDigest = new String(Base64.encode(messageDigest.digest(body.getBytes(StandardCharsets.UTF_8))));
 
             if (!newDigest.equals(digest)) {
-                throw new SignatureException("Body signature invalid");
+                throw new SignatureException("Content-Digest value is invalid. Expected body digest is: " + newDigest);
             }
         } catch (NoSuchAlgorithmException ex) {
             throw new SignatureException("Error creating message digest: " + ex.getMessage(), ex);
@@ -107,25 +108,33 @@ public class VerificationService {
     }
 
     private void verifySignature(PublicKey publicKey, String base, Map<String, String> headers) throws SignatureException {
+
+        if (!headers.containsKey("signature")) {
+            throw new SignatureException("Signature header missing");
+        }
+
+        String signatureHeader = headers.get("signature");
+        Matcher signatureMatcher = signaturePattern.matcher(signatureHeader);
+        if (!signatureMatcher.find()) {
+            throw new SignatureException("Signature header invalid");
+        }
+        String signature = signatureMatcher.group(1);
+
+        byte[] signatureBytes;
         try {
-            if (!headers.containsKey("signature")) {
-                throw new SignatureException("Signature header missing");
-            }
+            signatureBytes = Base64.decode(signature);
+        } catch (Exception ex) {
+            throw new SignatureException("Signature not a valid Base64: " + ex.getMessage(), ex);
+        }
 
-            String signatureHeader = headers.get("signature");
-            Matcher signatureMatcher = signaturePattern.matcher(signatureHeader);
-            if (!signatureMatcher.find()) {
-                throw new SignatureException("Signature header invalid");
-            }
-            String signature = signatureMatcher.group(1);
-            byte[] signatureBytes = Base64.decode(signature);
+        Signer signer;
+        if (keypairService.getAlgorithm().equals("RSA")) {
+            signer = new RSADigestSigner(new SHA256Digest());
+        } else {
+            signer = new Ed25519Signer();
+        }
 
-            Signer signer;
-            if (keypairService.getAlgorithm().equals("RSA")) {
-                signer = new RSADigestSigner(new SHA256Digest());
-            } else {
-                signer = new Ed25519Signer();
-            }
+        try {
             AsymmetricKeyParameter publicKeyParameters = PublicKeyFactory.createKey(publicKey.getEncoded());
             signer.init(false, publicKeyParameters);
             byte[] baseBytes = base.getBytes(StandardCharsets.UTF_8);
@@ -150,7 +159,7 @@ public class VerificationService {
 
             Matcher signatureInputMatcher = signatureInputPattern.matcher(signatureInputHeader);
             if (!signatureInputMatcher.find()) {
-                throw new SignatureException("Invalid signature-input");
+                throw new SignatureException("Invalid signature-input. Make sure it's of format: .*=\\(.+\\;created=\\d+)");
             }
             String signatureInput = signatureInputMatcher.group(2).replaceAll("\"", "");
             List<String> signatureParams = List.of(signatureInput.split(" "));
