@@ -33,8 +33,8 @@ That said, it is entirely acceptable to include the signature for other APIs and
 ## Creating a Message Signature
 
 The signature scheme is compliant with these upcoming IETF standards (currently not yet RFCs):
-- https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-11.html
-- https://www.ietf.org/archive/id/draft-ietf-httpbis-digest-headers-10.html
+- [draft-ietf-httpbis-message-signatures-11](https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-11.html)
+- [draft-ietf-httpbis-digest-headers-10](https://www.ietf.org/archive/id/draft-ietf-httpbis-digest-headers-10.html)
 
 It is strongly recommended to read the above drafts.
 
@@ -48,7 +48,7 @@ Four HTTP headers need to be added to each HTTP message sent to an API in scope 
 ### Content-Digest Header
 This step can be skipped if there is no payload in the HTTP message (e.g., for a GET call).
 
-To add the Content-Digest header (specified in https://www.ietf.org/archive/id/draft-ietf-httpbis-digest-headers-10.html), calculate a SHA-256 digest over the HTTP payload. While the specification allows to add more than one digest (e.g., both SHA-256 and SHA-512), only a single digest using SHA-256 is supported in our case.
+To add the Content-Digest header (specified in [draft-ietf-httpbis-digest-headers-10](https://www.ietf.org/archive/id/draft-ietf-httpbis-digest-headers-10.html)), calculate a SHA-256 digest over the HTTP payload. While the specification allows to add more than one digest (e.g., both SHA-256 and SHA-512), only a single digest using SHA-256 is supported in our case.
 
 For the following payload:
 ```
@@ -66,7 +66,7 @@ Signature-Key: eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoiTjZIc2ItenlIXzZ4b
 ```
 
 ### Signature-Input Header
-The Signature-Input and Signature headers are created as specified in https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-11.html
+The Signature-Input and Signature headers are created as specified in [draft-ietf-httpbis-message-signatures-11](https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-11.html)
 
 The value of the Signature-Input header is:
 ```
@@ -81,12 +81,12 @@ sig1=("signature-key" "@method" "@path" "@authority");created=1658272908
 
 ### Signature Headers
 
-The value of the Signature header is created as specified in [section 3.1 of the above IETF draft](https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-message-signatures#section-3.1).
+The value of the Signature header is created as specified in [section 3.1 of the above IETF draft](https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-11.html#section-3.1).
 
 Depending on the used cipher, either of the following two sections applies:
 
-- [RSASSA-PKCS1-v1_5 using SHA-256](https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-message-signatures#section-3.3.2)
-- [EdDSA using curve edwards25519](https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-message-signatures#section-3.3.5)
+- [RSASSA-PKCS1-v1_5 using SHA-256](https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-11.html#section-3.3.2)
+- [EdDSA using curve edwards25519](https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-11.html#section-3.3.5)
 
 The test keys in this document are the same used in the IETF draft.
 
