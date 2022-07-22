@@ -4,7 +4,7 @@
 
 Due to regulatory requirements for our European/UK sellers, we are requiring our developers to add a digital signature for every HTTP call that is made on behalf of a EU/UK seller to certain APIs. This document specifies the way the signature is created and added to an HTTP message.
 
-Moreover, this document describes a test code we implemented that allows to verify signatures using test keys.
+Moreover, this document describes a test code we implemented that allows to verify signatures using test keys. This code can be deployed using a Docker container for any developer to test their own code until such time that eBay has provided a similar functionality on the sandbox DECO APIs.
 
 ## APIs in Scope
 
@@ -48,7 +48,7 @@ Four HTTP headers need to be added to each HTTP message sent to an API in scope 
 ### Content-Digest Header
 This step can be skipped if there is no payload in the HTTP message (e.g., for a GET call).
 
-To add the Content-Digest header (specified in https://www.ietf.org/archive/id/draft-ietf-httpbis-digest-headers-10.html), calculate a SHA-256 digest over the HTTP payload. While the specification allows to add more than one digest (e.g., both SHA-256 and SHA-512), only the SHA-256 is needed in our case.
+To add the Content-Digest header (specified in https://www.ietf.org/archive/id/draft-ietf-httpbis-digest-headers-10.html), calculate a SHA-256 digest over the HTTP payload. While the specification allows to add more than one digest (e.g., both SHA-256 and SHA-512), only a single digest using SHA-256 is supported in our case.
 
 For the following payload:
 ```
@@ -60,7 +60,7 @@ sha-256=:X48E9qOokqqrvdts8nOJRJN3OWDUoyWxBf7kbu9DBPE=:
 ```
 
 ### Signature-Key Header
-The “Signature-Key” header always contains the JWE that is provided via the developer portal for this application (or the test JWE provided in this document for testing purposes on the sandbox). For example (there wouldn’t be any line-breaks):
+The “Signature-Key” header always contains the JWE that is provided via the developer portal for this application (or the test JWE provided in this document for testing purposes). For example:
 ```
 Signature-Key: eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoiTjZIc2ItenlIXzZ4blFHQUhOdHByZyIsImFsZyI6IkEyNTZHQ01LVyIsIml2IjoiNjQ1Z0Rzc2lOYUZFb2pOWCJ9.rSWQSIKGgu_gAhLdG87fIpRYyI57KMQKYJpgQoXhPso.jvrOE0g2Q7A8h_Rj.uZsaA0VaVjL9HiciAilnNsos7Da-Fx5W3tr9sZO4qSPD-hB9t-lacy96lyeLiixs0nHXZ21iEwFYkqOllxpqW6eyJPb6lLDrnzg8Nx5AvizLagSDT35_3xBTu6EWf6x-lWBMKiBj8zo31wdjaGWMExcaQSPpwZxbJ3Z1sM4aZmHX7sjjnIT0V9kH1kAj0kD7uGuJ8KlMvrl011z68kJt-ilYG4FZn_Z5.CZzMDhEn1jqL45bYvbO3ig
 ```
@@ -198,9 +198,9 @@ curl --location --request POST 'http://localhost:8080/verifysignature' \
 
 ## Integration Test
 
-You can run an integration test that will add a signature to an HTTP message in ApplicationTestsIT.java
+You can run an integration test that will add a signature to an HTTP message in `ApplicationTestsIT.java` and then verify the same signature.
 
-## How to Compile the Code and Build the Container;
+## How to Compile the Code and Build the Container
 
 ```
 ./mvnw clean install
