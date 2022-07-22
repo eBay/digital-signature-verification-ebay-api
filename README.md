@@ -46,7 +46,7 @@ Four HTTP headers need to be added to each HTTP message sent to an API in scope 
 
 
 ### Content-Digest Header
-This step can be skipped if there is payload in the HTTP message (e.g., for a GET call).
+This step can be skipped if there is no payload in the HTTP message (e.g., for a GET call).
 
 To add the Content-Digest header (specified in https://www.ietf.org/archive/id/draft-ietf-httpbis-digest-headers-10.html), calculate a SHA-256 digest over the HTTP payload. While the specification allows to add more than one digest (e.g., both SHA-256 and SHA-512), only the SHA-256 is needed in our case.
 
