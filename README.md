@@ -4,7 +4,7 @@
 
 Due to regulatory requirements for our European/UK sellers, we are requiring our developers to add a digital signature for every HTTP call that is made on behalf of a EU/UK seller to certain APIs. This document specifies the way the signature is created and added to an HTTP message.
 
-Moreover, this document describes a test code we implemented that allows to verify signatures using test keys. This code can be deployed using a Docker container for any developer to test their own code until such time that eBay has provided a similar functionality on the sandbox DECO APIs.
+Moreover, this document describes a test code we implemented that allows to verify signatures using test keys. This code can be deployed using a Docker container for any external developer to test their own code until such time that eBay has provided a similar functionality on the sandbox DECO APIs.
 
 ## APIs in Scope
 
@@ -92,11 +92,11 @@ The test keys in this document are the same used in the IETF draft.
 
 ## How to Test the Signature Mechanism
 
-eBay will soon provide testing capabilities on our Sandbox environment. We will send out communication once that is available. In the meantime, we provide you a Docker container with a web server that will let you test your signature creation. This process is described in the following.
+eBay will soon provide testing capabilities on our Sandbox environment. We will send out communication once that is available. In the meantime, we provide a Docker container with a web server that allows external developers to test their signature creation. This process is described in the following.
 
 ### Key Material
 
-Developers will be issued a private key, as well as a public key in the form of a JWE. Downloading the keys will be available from the developer portal after logging in. The download feature is currently not yet available, and we will send out communication once this is ready. In the meantime, we will provide you with test keys below (the below samples also include the public key in PEM format, but you won’t need this for signature creation). The recommended signature cipher is “Ed25519” (Edwards Curve). As a fallback – in case your development framework doesn’t support this cipher – we also accept RSA. Ed25519 uses much shorter keys and will decrease the header size, which is why it is preferred over RSA.
+Developers will be issued a private key, as well as a public key in the form of a JWE. Downloading the keys will be available from the developer portal after logging in. The download feature is currently not yet available, and we will send out communication once this is ready. In the meantime, we provide test keys below (the below samples also include the public key in PEM format, but they aren't needed for signature creation). The recommended signature cipher is “Ed25519” (Edwards Curve). As a fallback – in case an external developer's code framework doesn’t support this cipher – we also accept RSA. Ed25519 uses much shorter keys and will decrease the header size, which is why it is preferred over RSA.
 
 The following test keys can be used (Note: They are the same as the sample keys from the above cited IETF drafts):
 
@@ -175,9 +175,9 @@ eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoiQlh3VVljQ1MyRHBEeW4xanNrSUVrQSIs
 
 ## Setting up the verification framework
 
-You can download the Docker image from TBD
+The Docker image can be downloaded from TBD
 
-Start the image like this:
+The image can be started with:
 ```
 docker run -it -p 8080:8080 signaturevalidation
 ```
@@ -185,7 +185,7 @@ The web server will run on port 8080 on localhost.
 
 ## Testing a Signature
 
-You can use Postman or curl (or any application that you implemented) to test the local verification web server. Here is a valid sample based on the above keys.
+Postman or curl (or any HTTP client) can be used to test the local verification web server. Here is a valid sample based on the above keys:
 ```
 curl --location --request POST 'http://localhost:8080/verifysignature' \
 --header 'Content-Type: application/json' \
@@ -198,10 +198,10 @@ curl --location --request POST 'http://localhost:8080/verifysignature' \
 
 ## Integration Test
 
-You can run an integration test that will add a signature to an HTTP message in `ApplicationTestsIT.java` and then verify the same signature.
+An integration test can be run that will add a signature to an HTTP message in `ApplicationTestsIT.java` and then to verify the same signature.
 
 ## How to Compile the Code and Build the Container
-In order to compile the code, you will need OpenJDK 11 or higher (tested only on OpenJDK 11). Furthermore, you will need Docker to create and run the docker image.
+In order to compile the code, OpenJDK 11 or higher is needed (tested only on OpenJDK 11). Furthermore, Docker (or any other Docker alternative) is required to create and run the OCI image.
 
 ```
 ./mvnw clean install
