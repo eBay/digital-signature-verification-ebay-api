@@ -201,6 +201,7 @@ curl --location --request POST 'http://localhost:8080/verifysignature' \
 You can run an integration test that will add a signature to an HTTP message in `ApplicationTestsIT.java` and then verify the same signature.
 
 ## How to Compile the Code and Build the Container
+In order to compile the code, you will need OpenJDK 11 or higher (tested only on OpenJDK 11). Furthermore, you will need Docker to create and run the docker image.
 
 ```
 ./mvnw clean install
