@@ -4,23 +4,20 @@
 
 Due to regulatory requirements for our European/UK sellers, we are requiring our developers to add a digital signature for every HTTP call that is made on behalf of a EU/UK seller to certain APIs. This document specifies the way the signature is created and added to an HTTP message.
 
-Moreover, this document describes a test code we implemented that allows to verify signatures using test keys. This code can be deployed using a Docker container for any external developer to test their own code until such time that eBay has provided a similar functionality on the sandbox DECO APIs.
+Moreover, this document describes test code that has been implemented enabling signatures to be verified using test keys. This code can be deployed using a Docker container for any external developer to test their own code until such time that eBay has provided a similar functionality on the sandbox DECO APIs.
 
 ## APIs in Scope
 
 Signatures only need to be added when the call is made on behalf of a seller who is domiciled in the EU or the UK, and only for the following APIs:
 
-- All [Finances APIs](https://developer.ebay.com/api-docs/sell/finances/resources/methods)
-- The following Fulfilment APIs:
-  - [issueRefund](https://developer.ebay.com/api-docs/sell/fulfillment/resources/order/methods/issueRefund)
-- The following Trading APIs:
-  - [GetAccount](https://developer.ebay.com/Devzone/XML/docs/Reference/eBay/GetAccount.html)
-- The following PostOrder APIs:
+- All methods in the [Finances API](https://developer.ebay.com/api-docs/sell/finances/resources/methods)
+- [issueRefund](https://developer.ebay.com/api-docs/sell/fulfillment/resources/order/methods/issueRefund) in the Fulfillment API
+- [GetAccount](https://developer.ebay.com/Devzone/XML/docs/Reference/eBay/GetAccount.html) in the Trading API
+- The following methods in the Post-Order API:
   - [Issue Inquiry Refund](https://developer.ebay.com/Devzone/post-order/post-order_v2_inquiry-inquiryid_issue_refund__post.html)
   - [Issue case refund](https://developer.ebay.com/Devzone/post-order/post-order_v2_casemanagement-caseid_issue_refund__post.html)
   - [Issue return refund](https://developer.ebay.com/Devzone/post-order/post-order_v2_return-returnid_issue_refund__post.html)
   - [Process Return Request](https://developer.ebay.com/Devzone/post-order/post-order_v2_return-returnid_decide__post.html)
-- The following Cancel APIs:
   - [Approve Cancellation Request](https://developer.ebay.com/devzone/post-order/post-order_v2_cancellation-cancelid_approve__post.html)
   - [Create Cancellation Request](https://developer.ebay.com/devzone/post-order/post-order_v2_cancellation__post.html)
 
@@ -36,19 +33,19 @@ The signature scheme is compliant with these upcoming IETF standards (currently 
 - [draft-ietf-httpbis-message-signatures-11](https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-11.html)
 - [draft-ietf-httpbis-digest-headers-10](https://www.ietf.org/archive/id/draft-ietf-httpbis-digest-headers-10.html)
 
-It is strongly recommended to read the above drafts.
+NOTE: It is strongly recommended that the above drafts be read.
 
 Four HTTP headers need to be added to each HTTP message sent to an API in scope (as defined above) and on behalf of a EU/UK domiciled seller:
-- Content-Digest: This header includes a SHA-256 digest over the HTTP payload, if any. It is not required to be sent for APIs that do not include a request payload (e.g., GET requests)
-- Signature-Key: This header includes the JWE as provided via the developer portal (or the above test JWE)
-- Signature-Input: This header indicates which headers and pseudo-headers and in which orders have been used to calculate the signature
-- Signature: This header includes the actual signature
+- Content-Digest: This header includes a SHA-256 digest over the HTTP payload, if any. It is not required to be sent for APIs that do not include a request payload (e.g., GET requests).
+- Signature-Key: This header includes the JWE as provided via the developer portal (or the test JWE provided below).
+- Signature-Input: This header indicates which headers and pseudo-headers and in which orders have been used to calculate the signature.
+- Signature: This header includes the actual signature.
 
 
 ### Content-Digest Header
 This step can be skipped if there is no payload in the HTTP message (e.g., for a GET call).
 
-To add the Content-Digest header (specified in [draft-ietf-httpbis-digest-headers-10](https://www.ietf.org/archive/id/draft-ietf-httpbis-digest-headers-10.html)), calculate a SHA-256 digest over the HTTP payload. While the specification allows to add more than one digest (e.g., both SHA-256 and SHA-512), only a single digest using SHA-256 is supported in our case.
+To add the Content-Digest header (as specified in [draft-ietf-httpbis-digest-headers-10](https://www.ietf.org/archive/id/draft-ietf-httpbis-digest-headers-10.html)), calculate a SHA-256 digest over the HTTP payload. While the specification allows adding more than one digest (e.g., both SHA-256 and SHA-512), only a single digest using SHA-256 is supported in our case.
 
 For the following payload:
 ```
@@ -72,31 +69,36 @@ The value of the Signature-Input header is:
 ```
 sig1=("content-digest" "signature-key" "@method" "@path" "@authority");created=1658272908
 ```
-(The value of “created” is replaced with the current unix timestamp when creating the signature)
+
+NOTE: The value assigned to the parameter created is the Unix timestamp when the signature is first created.
 
 If no payload is included in the HTTP message, the header would be:
 ```
 sig1=("signature-key" "@method" "@path" "@authority");created=1658272908
 ```
 
-### Signature Headers
+### Signature Header
 
 The value of the Signature header is created as specified in [section 3.1 of the above IETF draft](https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-11.html#section-3.1).
 
-Depending on the used cipher, either of the following two sections applies:
+Depending on the cipher used, either of the following two sections applies:
 
 - [RSASSA-PKCS1-v1_5 using SHA-256](https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-11.html#section-3.3.2)
 - [EdDSA using curve edwards25519](https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-11.html#section-3.3.5)
 
-The test keys in this document are the same used in the IETF draft.
+The test keys in this document are the same as those used in the IETF draft.
 
 ## How to Test the Signature Mechanism
 
-eBay will soon provide testing capabilities on our Sandbox environment. We will send out communication once that is available. In the meantime, we provide a Docker container with a web server that allows external developers to test their signature creation. This process is described in the following.
+eBay will soon provide testing capabilities on our Sandbox environment. We will send out communication once that is available. In the meantime, we provide a Docker container with a web server that allows external developers to test their signature creation. This process is described in the following sections.
 
-### Key Material
+### Key Information
 
-Developers will be issued a private key, as well as a public key in the form of a JWE. Downloading the keys will be available from the developer portal after logging in. The download feature is currently not yet available, and we will send out communication once this is ready. In the meantime, we provide test keys below (the below samples also include the public key in PEM format, but they aren't needed for signature creation). The recommended signature cipher is “Ed25519” (Edwards Curve). As a fallback – in case an external developer's code framework doesn’t support this cipher – we also accept RSA. Ed25519 uses much shorter keys and will decrease the header size, which is why it is preferred over RSA.
+Developers will be issued a private key, as well as a public key in the form of a JWE. Downloading the keys will be available from the developer portal after logging in. The download feature is currently not yet available, and we will send out communication once this is ready. In the meantime, we have provided test keys below.
+		
+NOTE: The following samples include public keys in PEM format. However, they are not required for signature creation.
+
+The recommended signature cipher is “Ed25519” (Edwards Curve). As a fallback – in case an external developer's code framework doesn’t support this cipher – we also accept RSA. Ed25519 uses much shorter keys and will decrease the header size, which is why it is preferred over RSA.
 
 The following test keys can be used (Note: They are the same as the sample keys from the above cited IETF drafts):
 
@@ -177,7 +179,7 @@ eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoiQlh3VVljQ1MyRHBEeW4xanNrSUVrQSIs
 
 The Docker image can be downloaded from TBD
 
-The image can be started with:
+Issue the following command to launch the image:
 ```
 docker run -it -p 8080:8080 signaturevalidation
 ```
@@ -185,7 +187,10 @@ The web server will run on port 8080 on localhost.
 
 ## Testing a Signature
 
-Postman or curl (or any HTTP client) can be used to test the local verification web server. Here is a valid sample based on the above keys:
+Postman, curl, or any HTTP client can be used to test the local verification web server.
+
+A valid sample using the above test keys is provided here for reference:
+
 ```
 curl --location --request POST 'http://localhost:8080/verifysignature' \
 --header 'Content-Type: application/json' \
@@ -198,10 +203,14 @@ curl --location --request POST 'http://localhost:8080/verifysignature' \
 
 ## Integration Test
 
-An integration test can be run that will add a signature to an HTTP message in `ApplicationTestsIT.java` and then to verify the same signature.
+An integration test can be run that will add a signature to an HTTP message in `ApplicationTestsIT.java` and then verify the same signature.
 
 ## How to Compile the Code and Build the Container
-In order to compile the code, OpenJDK 11 or higher is needed (tested only on OpenJDK 11). Furthermore, Docker (or any other Docker alternative) is required to create and run the OCI image.
+In order to compile the code, OpenJDK 11 or higher is required.
+
+NOTE: This process has only been tested with OpenJDK 11. 
+
+Additionally, Docker (or any other Docker alternative) is required to create and run the OCI image.
 
 ```
 ./mvnw clean install
