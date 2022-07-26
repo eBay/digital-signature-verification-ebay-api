@@ -37,8 +37,8 @@ public class KeypairService {
 
     private static final String KEYS_FOLDER = "src/main/resources/keys/";
 
-//    private final String algorithm = EdDSAParameterSpec.Ed25519;
-    private String algorithm = "RSA";
+    private final String algorithm = EdDSAParameterSpec.Ed25519;
+//    private String algorithm = "RSA";
 
     public KeypairService() throws SignatureException {
         try {
