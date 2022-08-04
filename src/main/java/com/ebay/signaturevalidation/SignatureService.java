@@ -30,7 +30,7 @@ public class SignatureService {
     private final KeypairService keypairService;
 
     private final Logger logger = LoggerFactory.getLogger(SignatureService.class.getName());
-    private final List<String> signatureParams = List.of("content-digest", "signature-key", "@method", "@path", "@authority");
+    private final List<String> signatureParams = List.of("content-digest", "x-ebay-signature-key", "@method", "@path", "@authority");
     private String signatureInput;
 
     private PrivateKey privateKey;
@@ -80,9 +80,9 @@ public class SignatureService {
     private void addSignatureKeyHeader(HttpRequest request, String jwt) throws SignatureException {
         try {
             HttpHeaders headers = request.getHeaders();
-            headers.put("Signature-key", List.of(jwt));
+            headers.put("x-ebay-signature-key", List.of(jwt));
         } catch (Exception ex) {
-            throw new SignatureException("Error adding Signature-Key header: " + ex.getMessage(), ex);
+            throw new SignatureException("Error adding x-ebay-signature-key header: " + ex.getMessage(), ex);
         }
     }
 

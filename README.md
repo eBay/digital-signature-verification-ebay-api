@@ -2,7 +2,7 @@
 
 ## Overview
 
-Due to regulatory requirements for our European/UK sellers, we are requiring our developers to add a digital signature for every HTTP call that is made on behalf of a EU/UK seller to certain APIs. This document specifies the way the signature is created and added to an HTTP message.
+Due to regulatory requirements emanating from SCA for our European/UK sellers, we are requiring our developers to add a digital signature for every HTTP call that is made on behalf of a EU/UK seller to certain APIs. This document specifies the way the signature is created and added to an HTTP message.
 
 Moreover, this document describes test code that has been implemented enabling signatures to be verified using test keys. This code can be deployed using a Docker container for any external developer to test their own code until such time that eBay has provided a similar functionality on the sandbox DECO APIs.
 
@@ -13,7 +13,7 @@ Signatures only need to be added when the call is made on behalf of a seller who
 - All methods in the [Finances API](https://developer.ebay.com/api-docs/sell/finances/resources/methods)
 - [issueRefund](https://developer.ebay.com/api-docs/sell/fulfillment/resources/order/methods/issueRefund) in the Fulfillment API
 - [GetAccount](https://developer.ebay.com/Devzone/XML/docs/Reference/eBay/GetAccount.html) in the Trading API
-- The following methods in the Post-Order API:
+- The below methods in the Post-Order API:
   - [Issue Inquiry Refund](https://developer.ebay.com/Devzone/post-order/post-order_v2_inquiry-inquiryid_issue_refund__post.html)
   - [Issue case refund](https://developer.ebay.com/Devzone/post-order/post-order_v2_casemanagement-caseid_issue_refund__post.html)
   - [Issue return refund](https://developer.ebay.com/Devzone/post-order/post-order_v2_return-returnid_issue_refund__post.html)
@@ -37,7 +37,7 @@ NOTE: It is strongly recommended that the above drafts be read.
 
 Four HTTP headers need to be added to each HTTP message sent to an API in scope (as defined above) and on behalf of a EU/UK domiciled seller:
 - Content-Digest: This header includes a SHA-256 digest over the HTTP payload, if any. It is not required to be sent for APIs that do not include a request payload (e.g., GET requests).
-- Signature-Key: This header includes the JWE as provided via the developer portal (or the test JWE provided below).
+- x-ebay-signature-key: This header includes the JWE as provided via the developer portal (or the test JWE provided below).
 - Signature-Input: This header indicates which headers and pseudo-headers and in which orders have been used to calculate the signature.
 - Signature: This header includes the actual signature.
 
@@ -56,10 +56,10 @@ The value of the Content-Digest header will be:
 sha-256=:X48E9qOokqqrvdts8nOJRJN3OWDUoyWxBf7kbu9DBPE=:
 ```
 
-### Signature-Key Header
-The “Signature-Key” header always contains the JWE that is provided via the developer portal for this application (or the test JWE provided in this document for testing purposes). For example:
+### x-ebay-signature-key Header
+The “x-ebay-signature-key” header always contains the JWE that is provided via the developer portal for this application (or the test JWE provided in this document for testing purposes). For example:
 ```
-Signature-Key: eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoiTjZIc2ItenlIXzZ4blFHQUhOdHByZyIsImFsZyI6IkEyNTZHQ01LVyIsIml2IjoiNjQ1Z0Rzc2lOYUZFb2pOWCJ9.rSWQSIKGgu_gAhLdG87fIpRYyI57KMQKYJpgQoXhPso.jvrOE0g2Q7A8h_Rj.uZsaA0VaVjL9HiciAilnNsos7Da-Fx5W3tr9sZO4qSPD-hB9t-lacy96lyeLiixs0nHXZ21iEwFYkqOllxpqW6eyJPb6lLDrnzg8Nx5AvizLagSDT35_3xBTu6EWf6x-lWBMKiBj8zo31wdjaGWMExcaQSPpwZxbJ3Z1sM4aZmHX7sjjnIT0V9kH1kAj0kD7uGuJ8KlMvrl011z68kJt-ilYG4FZn_Z5.CZzMDhEn1jqL45bYvbO3ig
+x-ebay-signature-key: eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoiTjZIc2ItenlIXzZ4blFHQUhOdHByZyIsImFsZyI6IkEyNTZHQ01LVyIsIml2IjoiNjQ1Z0Rzc2lOYUZFb2pOWCJ9.rSWQSIKGgu_gAhLdG87fIpRYyI57KMQKYJpgQoXhPso.jvrOE0g2Q7A8h_Rj.uZsaA0VaVjL9HiciAilnNsos7Da-Fx5W3tr9sZO4qSPD-hB9t-lacy96lyeLiixs0nHXZ21iEwFYkqOllxpqW6eyJPb6lLDrnzg8Nx5AvizLagSDT35_3xBTu6EWf6x-lWBMKiBj8zo31wdjaGWMExcaQSPpwZxbJ3Z1sM4aZmHX7sjjnIT0V9kH1kAj0kD7uGuJ8KlMvrl011z68kJt-ilYG4FZn_Z5.CZzMDhEn1jqL45bYvbO3ig
 ```
 
 ### Signature-Input Header
@@ -67,14 +67,14 @@ The Signature-Input and Signature headers are created as specified in [draft-iet
 
 The value of the Signature-Input header is:
 ```
-sig1=("content-digest" "signature-key" "@method" "@path" "@authority");created=1658272908
+sig1=("content-digest" "x-ebay-signature-key" "@method" "@path" "@authority");created=1659651955
 ```
 
 NOTE: The value assigned to the parameter created is the Unix timestamp when the signature is first created.
 
 If no payload is included in the HTTP message, the header would be:
 ```
-sig1=("signature-key" "@method" "@path" "@authority");created=1658272908
+sig1=("x-ebay-signature-key" "@method" "@path" "@authority");created=1659651955
 ```
 
 ### Signature Header
@@ -120,7 +120,7 @@ MCowBQYDK2VwAyEAJrQLj5P/89iXES9+vFgrIy29clF9CC/oPPsw3c5D0bs=
 
 ##### Public Key (as JWE)
 ```
-eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoidVNpNmxTZXZoUGI4Q25IYnRhcnBGZyIsImFsZyI6IkEyNTZHQ01LVyIsIml2Ijoiem5LU3VQSk5PZHY3M1htLSJ9.Thr5sk5JShOXcwduqsnSpBBZFyu2PAgKhSr4psrAjBk.Sv7fUpuUCBOePabZ.YIjcmQV-cRGs5-nm53b61kjxxRJ_3esKWUlVYI4D8orspqcyXe5CqJ4bKAtTDSRNr0exv10fHnpmcVt6YQF1GT9BV9uuisWpfWO4q49Q66HJV3uKdqklRBqWvrGuzpLmfeDGx1t_D9bKkGORT6QMFDgNkxdTmy2tOuwAvrUiB5KZyGQOvuq9PCtsUT3ldNd1sdKM7-GvFxpQMEg3RhSBGu4.zZiqofr6SncKLc0lhPCDXQ
+eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoiSGdLcjNSSWFlZll0Mkd4blBUUTEwUSIsImFsZyI6IkEyNTZHQ01LVyIsIml2IjoiQTVOQXFYUXlITkNIT01GVSJ9.z3JcS0vvxrYboqpySAq_Znww-3V6AllxmJP5JEMkuLY.K1f4MVMEc8ylbfSS.fASwJyMCk2tXZsNWk13IcuVgSWTOcynSdAoJrK4WApZANlxAP9J0qr0Jz_4aFldFDSZ5tfuxLGqzJmWU7CiZWwNjk2XoVy8q5ogMrFNFwFXP4SrX1XORhNLZPTyS5DEqLDPYn2NX944xendEwfcxxXsTSeNCUnmSyfitiscUC04GYOfn0UWQ2buSWx7Yod0IR2GtTGUsM9o3J-riuNDKhw.rRsWM1Sl_2stTnZLJkWVmQ
 ```
 
 #### RSA
@@ -194,10 +194,10 @@ A valid sample using the above test keys is provided here for reference:
 ```
 curl --location --request POST 'http://localhost:8080/verifysignature' \
 --header 'Content-Type: application/json' \
---header 'Signature-Input: sig1=("content-digest" "signature-key" "@method" "@path" "@authority");created=1658440308' \
+--header 'Signature-Input: sig1=("content-digest" "x-ebay-signature-key" "@method" "@path" "@authority");created=1659651955' \
 --header 'Content-Digest: sha-256=:X48E9qOokqqrvdts8nOJRJN3OWDUoyWxBf7kbu9DBPE=:' \
---header 'Signature: sig1=:61GTr30Cc/xU+GLHBJad2/nuJNXe0VlWVIGG00djkOCGoVAvz1Xj0+ANrjOQYgueG9PuaayhH4ffrSlqxal1CQ==:' \
---header 'Signature-Key: eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoidVNpNmxTZXZoUGI4Q25IYnRhcnBGZyIsImFsZyI6IkEyNTZHQ01LVyIsIml2Ijoiem5LU3VQSk5PZHY3M1htLSJ9.Thr5sk5JShOXcwduqsnSpBBZFyu2PAgKhSr4psrAjBk.Sv7fUpuUCBOePabZ.YIjcmQV-cRGs5-nm53b61kjxxRJ_3esKWUlVYI4D8orspqcyXe5CqJ4bKAtTDSRNr0exv10fHnpmcVt6YQF1GT9BV9uuisWpfWO4q49Q66HJV3uKdqklRBqWvrGuzpLmfeDGx1t_D9bKkGORT6QMFDgNkxdTmy2tOuwAvrUiB5KZyGQOvuq9PCtsUT3ldNd1sdKM7-GvFxpQMEg3RhSBGu4.zZiqofr6SncKLc0lhPCDXQ' \
+--header 'Signature: sig1=:uunxYrXKC8KaoupD5D1DKdmQmrOhz6b4Xbhb3o9d4x4xFIpg++XzEZztOyeOI59rMMjM3NIcFgxBH0c1ckpfBw==:' \
+--header 'x-ebay-signature-key: eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoiSGdLcjNSSWFlZll0Mkd4blBUUTEwUSIsImFsZyI6IkEyNTZHQ01LVyIsIml2IjoiQTVOQXFYUXlITkNIT01GVSJ9.z3JcS0vvxrYboqpySAq_Znww-3V6AllxmJP5JEMkuLY.K1f4MVMEc8ylbfSS.fASwJyMCk2tXZsNWk13IcuVgSWTOcynSdAoJrK4WApZANlxAP9J0qr0Jz_4aFldFDSZ5tfuxLGqzJmWU7CiZWwNjk2XoVy8q5ogMrFNFwFXP4SrX1XORhNLZPTyS5DEqLDPYn2NX944xendEwfcxxXsTSeNCUnmSyfitiscUC04GYOfn0UWQ2buSWx7Yod0IR2GtTGUsM9o3J-riuNDKhw.rRsWM1Sl_2stTnZLJkWVmQ' \
 --data-raw '{"hello": "world"}'
 ```
 

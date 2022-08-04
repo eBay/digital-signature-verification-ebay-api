@@ -54,11 +54,11 @@ public class VerificationService {
     }
 
     private PublicKey verifyJWT(Map<String, String> headers) throws SignatureException {
-        if (!headers.containsKey("signature-key")) {
-            throw new SignatureException("Signature-Key header missing");
+        if (!headers.containsKey("x-ebay-signature-key")) {
+            throw new SignatureException("x-ebay-signature-key header missing");
         }
 
-        String jwtString = headers.get("signature-key");
+        String jwtString = headers.get("x-ebay-signature-key");
         EncryptedJWT jwe = keypairService.decryptJWE(jwtString);
 
         try {
@@ -69,7 +69,7 @@ public class VerificationService {
             X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
             return keyFactory.generatePublic(keySpec);
         } catch (ParseException | NoSuchAlgorithmException | InvalidKeySpecException ex) {
-            throw new SignatureException("Error parsing JWE from Signature-Key header: " + ex.getMessage(), ex);
+            throw new SignatureException("Error parsing JWE from x-ebay-signature-key header: " + ex.getMessage(), ex);
         }
 
     }

@@ -59,7 +59,7 @@ public class KeypairService {
             jwe.decrypt(jweDecrypter);
             return jwe;
         } catch (ParseException | JOSEException ex) {
-            throw new SignatureException("Error decrypting the JWE from Signature-Key header", ex);
+            throw new SignatureException("Error decrypting the JWE from x-ebay-signature-key header", ex);
         }
     }
 
