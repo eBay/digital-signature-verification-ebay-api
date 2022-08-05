@@ -23,7 +23,7 @@ jobs:
         mvn clean package --file pom.xml
         
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag ebay-api-signature-verification:latest
+      run: docker build . --file Dockerfile --tag ebay/digital-signature-verification-ebay-api:latest
 
     - name: Login to DockerHub
       uses: docker/login-action@v2
@@ -38,4 +38,4 @@ jobs:
         DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Push
-      run: docker push ebay-api-signature-verification:latest
+      run: docker push ebay/digital-signature-verification-ebay-api:latest
