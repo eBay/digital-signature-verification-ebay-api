@@ -94,7 +94,7 @@ eBay will soon provide testing capabilities on our Sandbox environment. We will 
 
 ### Key Information
 
-Developers will be issued a private key, as well as a public key in the form of a JWE. Downloading the keys will be available from the developer portal after logging in. The download feature is currently not yet available, and we will send out communication once this is ready. In the meantime, we have provided test keys below.
+Developers will be provided a public API to obtain a private key, as well as a public key in the form of a JWE. Details of the public API will be sent out in a followup communication when it is ready. In the meantime, we have provided test keys below.
 		
 NOTE: The following samples include public keys in PEM format. However, they are not required for signature creation.
 
