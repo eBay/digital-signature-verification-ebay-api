@@ -177,7 +177,7 @@ eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoiQlh3VVljQ1MyRHBEeW4xanNrSUVrQSIs
 
 ## Setting up the verification framework
 
-The Docker image can be downloaded from TBD
+The Docker image can be downloaded from https://hub.docker.com/r/ebay/digital-signature-verification-ebay-api
 
 Issue the following command to launch the image:
 ```
