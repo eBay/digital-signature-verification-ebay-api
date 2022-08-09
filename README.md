@@ -4,7 +4,7 @@
 
 Due to regulatory requirements emanating from SCA for our European/UK sellers, we are requiring our developers to add a digital signature for every HTTP call that is made on behalf of a EU/UK seller to certain APIs. This document specifies the way the signature is created and added to an HTTP message.
 
-Moreover, this document describes test code that has been implemented enabling signatures to be verified using test keys. This code can be deployed using a Docker container for any external developer to test their own code until such time that eBay has provided a similar functionality on the sandbox DECO APIs.
+Moreover, this document describes test code that has been implemented enabling signatures to be verified using test keys. This code can be deployed using a Docker container to test their own code until such time that eBay has provided a similar functionality in the sandbox environment.
 
 ## APIs in Scope
 
@@ -37,7 +37,7 @@ NOTE: It is strongly recommended that the above drafts be read.
 
 Four HTTP headers need to be added to each HTTP message sent to an API in scope (as defined above) and on behalf of a EU/UK domiciled seller:
 - Content-Digest: This header includes a SHA-256 digest over the HTTP payload, if any. It is not required to be sent for APIs that do not include a request payload (e.g., GET requests).
-- x-ebay-signature-key: This header includes the JWE as provided via the developer portal (or the test JWE provided below).
+- x-ebay-signature-key: This header includes the JWE (or the test JWE provided below).
 - Signature-Input: This header indicates which headers and pseudo-headers and in which orders have been used to calculate the signature.
 - Signature: This header includes the actual signature.
 
@@ -57,7 +57,7 @@ sha-256=:X48E9qOokqqrvdts8nOJRJN3OWDUoyWxBf7kbu9DBPE=:
 ```
 
 ### x-ebay-signature-key Header
-The “x-ebay-signature-key” header always contains the JWE that is provided via the developer portal for this application (or the test JWE provided in this document for testing purposes). For example:
+The x-ebay-signature-key header always contains the JWE (or the test JWE below for testing purposes). For example:
 ```
 x-ebay-signature-key: eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoiTjZIc2ItenlIXzZ4blFHQUhOdHByZyIsImFsZyI6IkEyNTZHQ01LVyIsIml2IjoiNjQ1Z0Rzc2lOYUZFb2pOWCJ9.rSWQSIKGgu_gAhLdG87fIpRYyI57KMQKYJpgQoXhPso.jvrOE0g2Q7A8h_Rj.uZsaA0VaVjL9HiciAilnNsos7Da-Fx5W3tr9sZO4qSPD-hB9t-lacy96lyeLiixs0nHXZ21iEwFYkqOllxpqW6eyJPb6lLDrnzg8Nx5AvizLagSDT35_3xBTu6EWf6x-lWBMKiBj8zo31wdjaGWMExcaQSPpwZxbJ3Z1sM4aZmHX7sjjnIT0V9kH1kAj0kD7uGuJ8KlMvrl011z68kJt-ilYG4FZn_Z5.CZzMDhEn1jqL45bYvbO3ig
 ```
@@ -90,7 +90,7 @@ The test keys in this document are the same as those used in the IETF draft.
 
 ## How to Test the Signature Mechanism
 
-eBay will soon provide testing capabilities on our Sandbox environment. We will send out communication once that is available. In the meantime, we provide a Docker container with a web server that allows external developers to test their signature creation. This process is described in the following sections.
+eBay will soon provide testing capabilities on Sandbox environment. We will send out communication once that is available. In the meantime, we provide a Docker container with a web server that allows external developers to test their signature creation. This process is described in the following sections.
 
 ### Key Information
 
