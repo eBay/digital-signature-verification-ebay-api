@@ -181,7 +181,7 @@ The Docker image can be downloaded from https://hub.docker.com/r/ebay/digital-si
 
 Issue the following command to launch the image:
 ```
-docker run -it -p 8080:8080 signaturevalidation
+docker run -it -p 8080:8080 ebay/digital-signature-verification-ebay-api
 ```
 The web server will run on port 8080 on localhost.
 
@@ -214,7 +214,7 @@ Additionally, Docker (or any other Docker alternative) is required to create and
 
 ```
 ./mvnw clean install
-docker build . -t signaturevalidation
+docker build . -t ebay/digital-signature-verification-ebay-api
 ```
 
 ## License
