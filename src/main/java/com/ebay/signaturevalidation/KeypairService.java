@@ -83,6 +83,7 @@ public class KeypairService {
                     .jwtID(UUID.randomUUID().toString())
                     .claim("appid", "app1") // this is set to the appId
                     .claim("pkey", new String(Base64.encode(publicKey.getEncoded()))) // public ed25519 key
+                    .claim("cipher", algorithm) // this is set to the appId
                     .build();
 
 //            logger.info("Claims: {}", jwtClaims.toJSONObject());

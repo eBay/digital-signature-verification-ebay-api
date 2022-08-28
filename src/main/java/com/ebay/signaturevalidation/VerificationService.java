@@ -65,7 +65,9 @@ public class VerificationService {
             JWTClaimsSet jwtClaimsSet = jwe.getJWTClaimsSet();
             // TODO: additional validation of expiration, appID etc
             byte[] keyBytes = Base64.decode((String) jwtClaimsSet.getClaim("pkey"));
-            KeyFactory keyFactory = KeyFactory.getInstance(keypairService.getAlgorithm());
+            String algorithm = (String) jwtClaimsSet.getClaim("cipher");
+
+            KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
             X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
             return keyFactory.generatePublic(keySpec);
         } catch (ParseException | NoSuchAlgorithmException | InvalidKeySpecException ex) {
@@ -123,8 +125,9 @@ public class VerificationService {
             throw new SignatureException("Signature not a valid Base64: " + ex.getMessage(), ex);
         }
 
+        String algorithm = publicKey.getAlgorithm();
         Signer signer;
-        if (keypairService.getAlgorithm().equals("RSA")) {
+        if (algorithm.equals("RSA")) {
             signer = new RSADigestSigner(new SHA256Digest());
         } else {
             signer = new Ed25519Signer();
