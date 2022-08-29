@@ -24,9 +24,6 @@ Signatures only need to be added when the call is made on behalf of a seller who
 That said, it is entirely acceptable to include the signature for other APIs and/or for sellers not domiciled in the EU/UK. eBay’s backend will ignore the signature in this case.
 
 
-
-
-
 ## Creating a Message Signature
 
 The signature scheme is compliant with these upcoming IETF standards (currently not yet RFCs):
@@ -67,14 +64,14 @@ The Signature-Input and Signature headers are created as specified in [draft-iet
 
 The value of the Signature-Input header is:
 ```
-sig1=("content-digest" "x-ebay-signature-key" "@method" "@path" "@authority");created=1659651955
+sig1=("content-digest" "x-ebay-signature-key" "@method" "@path" "@authority");created=1658440308
 ```
 
 NOTE: The value assigned to the parameter created is the Unix timestamp when the signature is first created.
 
 If no payload is included in the HTTP message, the header would be:
 ```
-sig1=("x-ebay-signature-key" "@method" "@path" "@authority");created=1659651955
+sig1=("x-ebay-signature-key" "@method" "@path" "@authority");created=1658440308
 ```
 
 ### Signature Header
@@ -120,7 +117,7 @@ MCowBQYDK2VwAyEAJrQLj5P/89iXES9+vFgrIy29clF9CC/oPPsw3c5D0bs=
 
 ##### Public Key (as JWE)
 ```
-eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoiSGdLcjNSSWFlZll0Mkd4blBUUTEwUSIsImFsZyI6IkEyNTZHQ01LVyIsIml2IjoiQTVOQXFYUXlITkNIT01GVSJ9.z3JcS0vvxrYboqpySAq_Znww-3V6AllxmJP5JEMkuLY.K1f4MVMEc8ylbfSS.fASwJyMCk2tXZsNWk13IcuVgSWTOcynSdAoJrK4WApZANlxAP9J0qr0Jz_4aFldFDSZ5tfuxLGqzJmWU7CiZWwNjk2XoVy8q5ogMrFNFwFXP4SrX1XORhNLZPTyS5DEqLDPYn2NX944xendEwfcxxXsTSeNCUnmSyfitiscUC04GYOfn0UWQ2buSWx7Yod0IR2GtTGUsM9o3J-riuNDKhw.rRsWM1Sl_2stTnZLJkWVmQ
+eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoiSXh2dVRMb0FLS0hlS0Zoa3BxQ05CUSIsImFsZyI6IkEyNTZHQ01LVyIsIml2IjoiaFd3YjNoczk2QzEyOTNucCJ9.2o02pR9SoTF4g_5qRXZm6tF4H52TarilIAKxoVUqjd8.3qaF0KJN-rFHHm_P.AMUAe9PPduew09mANIZ-O_68CCuv6EIx096rm9WyLZnYz5N1WFDQ3jP0RBkbaOtQZHImMSPXIHVaB96RWshLuJsUgCKmTAwkPVCZv3zhLxZVxMXtPUuJ-ppVmPIv0NzznWCOU5Kvb9Xux7ZtnlvLXgwOFEix-BaWNomUAazbsrUCbrp514GIea3butbyxXLNi6R9TJUNh8V2uan-optT1MMyS7eMQnVGL5rYBULk.9K5ucUqAu0DqkkhgubsHHw
 ```
 
 #### RSA
@@ -172,7 +169,7 @@ aOT9v6d+nb4bnNkQVklLQ3fVAvJm+xdDOp9LCNCN48V2pnDOkFV6+U9nV5oyc6XI
 
 ##### Public Key (as JWE)
 ```
-eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoiQlh3VVljQ1MyRHBEeW4xanNrSUVrQSIsImFsZyI6IkEyNTZHQ01LVyIsIml2IjoiSFlKZV9pX1JvX3dEVFRjeSJ9.mzzNmEYVENteXFyYGwOuIjDcRDBsMrEm_g43Lv7-oWU.-XI55qpQSn1SKgE8.bIFK9LmDVbo119VibK9dAHhRIzXs58HfyJMCoc9bwU6WEZlRo7E_PwPge3npGP9a4IcQH1VD4uO7_J0XbJvv9IaakVMJ4D8Hzh9dBetuwkY3zZ00ObE9KcVNA4iHdalQ4jYkZboabWTtQDqQjIf19sgbBwXAEoLkHruJAbdPWflqfqQ4VTeP3Az6Q9wDhEKAWLNyKWIbN8DCTPlTJa_DzJDwvQhyYVDqD0rg8fnaq4KAXFGrk-l2ztbEQEkylzqTrRu-6g_5WGdihfL9YG2jtdmU3YJwr46SLDJvc4RixzUsf2URbxoWvKDGEGit4h1vnBykeXA3jp90Kk7aAa-7h6ZLi1ajMWAG65ph6lZUeXqLdKeHR-NCuonOrI9_cjFbhVn7AY1Slq0jxrA7Ws2QL4LRulo6RZVe21IaicoDEpa6RtNAg9FDzQfNa2ke16c4RGOI0cWxsvfX8fygzRyQM7N-ODC0Gkm5Ip4ikmdJEY8ovN3LSPXCMdWxqVAw9X_LMFjo1X2_XCycigKXnrZrBA7L3-czGXUq8SWfuqm_RLN4.VE2ryVxII2YFuD65f35opg
+eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoiYVMxUlZybG9UdXdRaDBuRHZDOGJFZyIsImFsZyI6IkEyNTZHQ01LVyIsIml2IjoiYVRwdE5ubGJqalJCR2dQQiJ9.6ZfgB6dRVjMqrney1nOlJpPm11tDziWFk2RuhwWrCyE.6lKneGYFN_148y3C.7Z0IMkg0e1dBFq4K5QmBoLi6V_cXTDF5rLyFss16j2IJMtdIknHHQn49tmSzjtM1gS04ueruCdBWixuPdzWOpJk-F6BkfslIDvP10WXesb0chGgPqROzWPzYJtZLJDDACFeqLBSRC5aevBYNZIBtbwoOZd9Q0JUAOhaLkeOmJEbnYoJyfDY-XLB9LgySNsE9GM2lo72NmAnjTxFal3Icnqd7pVhbhG5gFvPJbNzZJgNXDKOxV3qJ4kkM6RIdxfuoqXe-8VTVOCUee4P5Ce6bw7wTFrpsZIiaKVb10r4tp7mf90Y2VyxTWMGJVtslI44dA4s8kz8lM_b9GE2jx8MYNOOqt7bJt_ATf87LiwSQ56SPdz0bEpWwYn8gqifj9SjtCyx4EOYQIHFIqbS0oUn8T_TIpvsSgD3RNP2jlFvxZI-9fHOOjhCqQ2_dyAWPWkLPtHERfwPUy5FDR3naKlucjfOKXzuraIqyX8pcZQbkq7ESiyTxZU-trkcvEDquOpJLWElxACYKhCBns00oG-TcOEzrAIBwXZlBMdQR7rLM3QmT3K4a-Yu1VBQ2bl4.FM42Am9AoxNanBs3cFCK0w
 ```
 
 ## Setting up the verification framework
@@ -194,10 +191,10 @@ A valid sample using the above test keys is provided here for reference:
 ```
 curl --location --request POST 'http://localhost:8080/verifysignature' \
 --header 'Content-Type: application/json' \
---header 'Signature-Input: sig1=("content-digest" "x-ebay-signature-key" "@method" "@path" "@authority");created=1659651955' \
+--header 'Signature-Input: sig1=("content-digest" "x-ebay-signature-key" "@method" "@path" "@authority");created=1658440308' \
 --header 'Content-Digest: sha-256=:X48E9qOokqqrvdts8nOJRJN3OWDUoyWxBf7kbu9DBPE=:' \
---header 'Signature: sig1=:uunxYrXKC8KaoupD5D1DKdmQmrOhz6b4Xbhb3o9d4x4xFIpg++XzEZztOyeOI59rMMjM3NIcFgxBH0c1ckpfBw==:' \
---header 'x-ebay-signature-key: eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoiSGdLcjNSSWFlZll0Mkd4blBUUTEwUSIsImFsZyI6IkEyNTZHQ01LVyIsIml2IjoiQTVOQXFYUXlITkNIT01GVSJ9.z3JcS0vvxrYboqpySAq_Znww-3V6AllxmJP5JEMkuLY.K1f4MVMEc8ylbfSS.fASwJyMCk2tXZsNWk13IcuVgSWTOcynSdAoJrK4WApZANlxAP9J0qr0Jz_4aFldFDSZ5tfuxLGqzJmWU7CiZWwNjk2XoVy8q5ogMrFNFwFXP4SrX1XORhNLZPTyS5DEqLDPYn2NX944xendEwfcxxXsTSeNCUnmSyfitiscUC04GYOfn0UWQ2buSWx7Yod0IR2GtTGUsM9o3J-riuNDKhw.rRsWM1Sl_2stTnZLJkWVmQ' \
+--header 'Signature: sig1=:ZMUpAejnqrt6POSx02ltx3cT9YODV2r+Cem/BKOagDSfztKOtCsjP/MxZqmY+FVJ3/8E4BL76T9Fjty8oJnsAw==:' \
+--header 'x-ebay-signature-key: eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoiSXh2dVRMb0FLS0hlS0Zoa3BxQ05CUSIsImFsZyI6IkEyNTZHQ01LVyIsIml2IjoiaFd3YjNoczk2QzEyOTNucCJ9.2o02pR9SoTF4g_5qRXZm6tF4H52TarilIAKxoVUqjd8.3qaF0KJN-rFHHm_P.AMUAe9PPduew09mANIZ-O_68CCuv6EIx096rm9WyLZnYz5N1WFDQ3jP0RBkbaOtQZHImMSPXIHVaB96RWshLuJsUgCKmTAwkPVCZv3zhLxZVxMXtPUuJ-ppVmPIv0NzznWCOU5Kvb9Xux7ZtnlvLXgwOFEix-BaWNomUAazbsrUCbrp514GIea3butbyxXLNi6R9TJUNh8V2uan-optT1MMyS7eMQnVGL5rYBULk.9K5ucUqAu0DqkkhgubsHHw' \
 --data-raw '{"hello": "world"}'
 ```
 

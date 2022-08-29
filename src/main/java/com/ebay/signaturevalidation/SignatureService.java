@@ -178,7 +178,8 @@ public class SignatureService {
             }
 
             signatureInputBuf.append(");created=");
-            signatureInputBuf.append(Instant.now().getEpochSecond());
+            signatureInputBuf.append("1658440308"); // TODO: This makes testing easier. But for real production code, you will want to use the next line instead of this one
+//            signatureInputBuf.append(Instant.now().getEpochSecond());
             signatureInput = signatureInputBuf.toString();
 
             buf.append(signatureInput);
