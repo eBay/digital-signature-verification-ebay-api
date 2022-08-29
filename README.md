@@ -24,9 +24,6 @@ Signatures only need to be added when the call is made on behalf of a seller who
 That said, it is entirely acceptable to include the signature for other APIs and/or for sellers not domiciled in the EU/UK. eBay’s backend will ignore the signature in this case.
 
 
-
-
-
 ## Creating a Message Signature
 
 The signature scheme is compliant with these upcoming IETF standards (currently not yet RFCs):
