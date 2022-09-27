@@ -47,6 +47,7 @@ public class VerificationService {
 
     public void verifyMessage(String body, Map<String, String> headers, URI uri, String method) throws SignatureException {
         String base = calculateBase(headers, uri, method);
+        logger.info("Calculated base:\n{}", base);
         PublicKey publicKey = verifyJWT(headers);
         verifyDigestHeader(body, headers);
         verifySignature(publicKey, base, headers);
