@@ -30,7 +30,7 @@ public class SignatureService {
     private final KeypairService keypairService;
 
     private final Logger logger = LoggerFactory.getLogger(SignatureService.class.getName());
-    private final List<String> signatureParams = List.of("content-digest", "x-ebay-signature-key", "@method", "@path", "@authority");
+    private List<String> signatureParams = List.of("content-digest", "x-ebay-signature-key", "@method", "@path", "@authority");
     private String signatureInput;
 
     private PrivateKey privateKey;
@@ -45,7 +45,11 @@ public class SignatureService {
 
 
     public void signMessage(HttpRequest request, byte[] body) throws SignatureException {
-        addDigestHeader(request, body);
+        if (body != null && body.length > 0) {
+            addDigestHeader(request, body);
+        } else {
+            signatureParams = List.of("x-ebay-signature-key", "@method", "@path", "@authority");
+        }
         addSignatureKeyHeader(request, jwt);
         addSignatureHeaders(request);
 
