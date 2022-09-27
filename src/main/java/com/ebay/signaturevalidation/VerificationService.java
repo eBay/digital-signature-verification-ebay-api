@@ -12,6 +12,7 @@ import org.bouncycastle.util.encoders.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.net.URI;
@@ -49,7 +50,9 @@ public class VerificationService {
         String base = calculateBase(headers, uri, method);
         logger.info("Calculated base:\n{}", base);
         PublicKey publicKey = verifyJWT(headers);
-        verifyDigestHeader(body, headers);
+        if (StringUtils.hasLength(body)) {
+            verifyDigestHeader(body, headers);
+        }
         verifySignature(publicKey, base, headers);
         logger.info("Message signature verified");
     }

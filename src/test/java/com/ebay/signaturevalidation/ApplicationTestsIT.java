@@ -24,13 +24,25 @@ class ApplicationTestsIT {
 
 
 	@Test
-	void testSigning() throws Exception {
+	void testSigningPOST() throws Exception {
 		String body = "{\"hello\": \"world\"}";
 
 		HttpHeaders headers = new HttpHeaders();
 		HttpEntity<String> requestEntity = new HttpEntity<>(body, headers);
 
 		ResponseEntity<String> response = restTemplateWithSignature.exchange(getLocalhostUrl() + "/verifysignature", HttpMethod.POST, requestEntity, String.class);
+
+		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertEquals(response.getBody(), "OK");
+	}
+
+	@Test
+	void testSigningGET() throws Exception {
+
+		HttpHeaders headers = new HttpHeaders();
+		HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+
+		ResponseEntity<String> response = restTemplateWithSignature.exchange(getLocalhostUrl() + "/verifysignature", HttpMethod.GET, requestEntity, String.class);
 
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
 		assertEquals(response.getBody(), "OK");
