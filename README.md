@@ -27,7 +27,7 @@ That said, it is entirely acceptable to include the signature for other APIs and
 ## Creating a Message Signature
 
 The signature scheme is compliant with these upcoming IETF standards (currently not yet RFCs):
-- [draft-ietf-httpbis-message-signatures-11](https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-11.html)
+- [draft-ietf-httpbis-message-signatures-15](https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-15.html)
 - [draft-ietf-httpbis-digest-headers-10](https://www.ietf.org/archive/id/draft-ietf-httpbis-digest-headers-10.html)
 
 NOTE: It is strongly recommended that the above drafts be read.
@@ -56,11 +56,11 @@ sha-256=:X48E9qOokqqrvdts8nOJRJN3OWDUoyWxBf7kbu9DBPE=:
 ### x-ebay-signature-key Header
 The x-ebay-signature-key header always contains the JWE (or the test JWE below for testing purposes). For example:
 ```
-x-ebay-signature-key: eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoiTjZIc2ItenlIXzZ4blFHQUhOdHByZyIsImFsZyI6IkEyNTZHQ01LVyIsIml2IjoiNjQ1Z0Rzc2lOYUZFb2pOWCJ9.rSWQSIKGgu_gAhLdG87fIpRYyI57KMQKYJpgQoXhPso.jvrOE0g2Q7A8h_Rj.uZsaA0VaVjL9HiciAilnNsos7Da-Fx5W3tr9sZO4qSPD-hB9t-lacy96lyeLiixs0nHXZ21iEwFYkqOllxpqW6eyJPb6lLDrnzg8Nx5AvizLagSDT35_3xBTu6EWf6x-lWBMKiBj8zo31wdjaGWMExcaQSPpwZxbJ3Z1sM4aZmHX7sjjnIT0V9kH1kAj0kD7uGuJ8KlMvrl011z68kJt-ilYG4FZn_Z5.CZzMDhEn1jqL45bYvbO3ig
+x-ebay-signature-key: eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoiSXh2dVRMb0FLS0hlS0Zoa3BxQ05CUSIsImFsZyI6IkEyNTZHQ01LVyIsIml2IjoiaFd3YjNoczk2QzEyOTNucCJ9.2o02pR9SoTF4g_5qRXZm6tF4H52TarilIAKxoVUqjd8.3qaF0KJN-rFHHm_P.AMUAe9PPduew09mANIZ-O_68CCuv6EIx096rm9WyLZnYz5N1WFDQ3jP0RBkbaOtQZHImMSPXIHVaB96RWshLuJsUgCKmTAwkPVCZv3zhLxZVxMXtPUuJ-ppVmPIv0NzznWCOU5Kvb9Xux7ZtnlvLXgwOFEix-BaWNomUAazbsrUCbrp514GIea3butbyxXLNi6R9TJUNh8V2uan-optT1MMyS7eMQnVGL5rYBULk.9K5ucUqAu0DqkkhgubsHHw
 ```
 
 ### Signature-Input Header
-The Signature-Input and Signature headers are created as specified in [draft-ietf-httpbis-message-signatures-11](https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-11.html)
+The Signature-Input and Signature headers are created as specified in [draft-ietf-httpbis-message-signatures-15](https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-15.html)
 
 The value of the Signature-Input header is:
 ```
@@ -76,12 +76,12 @@ sig1=("x-ebay-signature-key" "@method" "@path" "@authority");created=1658440308
 
 ### Signature Header
 
-The value of the Signature header is created as specified in [section 3.1 of the above IETF draft](https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-11.html#section-3.1).
+The value of the Signature header is created as specified in [section 3.1 of the above IETF draft](https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-15.html#section-3.1).
 
 Depending on the cipher used, either of the following two sections applies:
 
-- [RSASSA-PKCS1-v1_5 using SHA-256](https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-11.html#section-3.3.2)
-- [EdDSA using curve edwards25519](https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-11.html#section-3.3.5)
+- [RSASSA-PKCS1-v1_5 using SHA-256](https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-15.html#section-3.3.2)
+- [EdDSA using curve edwards25519](https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-15.html#section-3.3.5)
 
 The test keys in this document are the same as those used in the IETF draft.
 
