@@ -91,7 +91,7 @@ eBay provides testing capabilities on Sandbox and production environment. You ca
 
 In addition, we provide a Docker container with a web server that allows external developers to test their signature creation. This process is described in the following sections.
 
-Please note that you can only use the test keys and JWEs listed in the README, not one retrieved from the Key Management API. These will only work on the ebay APIs.
+Please note that you can only use the test keys and JWEs listed in the README, not one retrieved from the [Key Management API](https://developer.ebay.com/api-docs/developer/key-management/overview.html). These will only work on the ebay APIs.
 
 ### Key Information
 
@@ -103,7 +103,7 @@ The recommended signature cipher is “Ed25519” (Edwards Curve). As a fallback
 
 The following test keys can be used (Note: They are the same as the sample keys from the above cited IETF drafts).
 
-Again, please note that you can only use the test keys and JWEs listed in the README, not one retrieved from the Key Management API. These will only work on the ebay APIs.
+Again, please note that you can only use the test keys and JWEs listed in the README, not one retrieved from the [Key Management API](https://developer.ebay.com/api-docs/developer/key-management/overview.html). These will only work on the ebay APIs.
 
 
 #### Ed25519
