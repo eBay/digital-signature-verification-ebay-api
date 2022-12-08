@@ -74,6 +74,8 @@ public class VerificationService {
             KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
             X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
             return keyFactory.generatePublic(keySpec);
+        } catch (NullPointerException ex) {
+            throw new SignatureException("Error parsing JWE from x-ebay-signature-key header. Make sure to use one of the JWEs listed in the README file. JWEs from older versions of this project do not work: " + ex.getMessage(), ex);
         } catch (ParseException | NoSuchAlgorithmException | InvalidKeySpecException ex) {
             throw new SignatureException("Error parsing JWE from x-ebay-signature-key header: " + ex.getMessage(), ex);
         }
