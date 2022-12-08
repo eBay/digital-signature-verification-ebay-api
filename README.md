@@ -87,7 +87,11 @@ The test keys in this document are the same as those used in the IETF draft.
 
 ## How to Test the Signature Mechanism
 
-eBay will soon provide testing capabilities on Sandbox environment. We will send out communication once that is available. In the meantime, we provide a Docker container with a web server that allows external developers to test their signature creation. This process is described in the following sections.
+eBay provides testing capabilities on Sandbox and production environment. You can review these here: https://developer.ebay.com/develop/guides/digital-signatures-for-apis
+
+In addition, we provide a Docker container with a web server that allows external developers to test their signature creation. This process is described in the following sections.
+
+Please note that you can only use the test keys and JWEs listed in the README, not one retrieved from the Key Management API. These will only work on the ebay APIs.
 
 ### Key Information
 
@@ -97,7 +101,10 @@ NOTE: The following samples include public keys in PEM format. However, they are
 
 The recommended signature cipher is “Ed25519” (Edwards Curve). As a fallback – in case an external developer's code framework doesn’t support this cipher – we also accept RSA. Ed25519 uses much shorter keys and will decrease the header size, which is why it is preferred over RSA.
 
-The following test keys can be used (Note: They are the same as the sample keys from the above cited IETF drafts):
+The following test keys can be used (Note: They are the same as the sample keys from the above cited IETF drafts).
+
+Again, please note that you can only use the test keys and JWEs listed in the README, not one retrieved from the Key Management API. These will only work on the ebay APIs.
+
 
 #### Ed25519
 
