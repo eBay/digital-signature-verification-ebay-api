@@ -26,11 +26,11 @@ That said, it is entirely acceptable to include the signature for other APIs and
 
 ## Creating a Message Signature
 
-The signature scheme is compliant with these upcoming IETF standards (currently not yet RFCs):
-- [draft-ietf-httpbis-message-signatures-15](https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-15.html)
-- [draft-ietf-httpbis-digest-headers-10](https://www.ietf.org/archive/id/draft-ietf-httpbis-digest-headers-10.html)
+The signature scheme is compliant with these IETF standards:
+- [RFC 9421 HTTP Message Signatures](https://www.rfc-editor.org/rfc/rfc9421.html)
+- [RFC 9530 Digest Fields](https://www.rfc-editor.org/rfc/rfc9530.html)
 
-NOTE: It is strongly recommended that the above drafts be read.
+NOTE: It is strongly recommended that the above standards be read.
 
 Four HTTP headers need to be added to each HTTP message sent to an API in scope (as defined above) and on behalf of a EU/UK domiciled seller:
 - Content-Digest: This header includes a SHA-256 digest over the HTTP payload, if any. It is not required to be sent for APIs that do not include a request payload (e.g., GET requests).
@@ -42,7 +42,7 @@ Four HTTP headers need to be added to each HTTP message sent to an API in scope 
 ### Content-Digest Header
 This step can be skipped if there is no payload in the HTTP message (e.g., for a GET call).
 
-To add the Content-Digest header (as specified in [draft-ietf-httpbis-digest-headers-10](https://www.ietf.org/archive/id/draft-ietf-httpbis-digest-headers-10.html)), calculate a SHA-256 digest over the HTTP payload. While the specification allows adding more than one digest (e.g., both SHA-256 and SHA-512), only a single digest using SHA-256 is supported in our case.
+To add the Content-Digest header (as specified in [RFC 9530 Digest Fields](https://www.rfc-editor.org/rfc/rfc9530.html)), calculate a SHA-256 digest over the HTTP payload. While the specification allows adding more than one digest (e.g., both SHA-256 and SHA-512), only a single digest using SHA-256 is supported in our case.
 
 For the following payload:
 ```
@@ -60,7 +60,7 @@ x-ebay-signature-key: eyJ6aXAiOiJERUYiLCJlbmMiOiJBMjU2R0NNIiwidGFnIjoiSXh2dVRMb0
 ```
 
 ### Signature-Input Header
-The Signature-Input and Signature headers are created as specified in [draft-ietf-httpbis-message-signatures-15](https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-15.html)
+The Signature-Input and Signature headers are created as specified in [RFC 9421 HTTP Message Signatures](https://www.rfc-editor.org/rfc/rfc9421.html)
 
 The value of the Signature-Input header is:
 ```
@@ -76,14 +76,14 @@ sig1=("x-ebay-signature-key" "@method" "@path" "@authority");created=1658440308
 
 ### Signature Header
 
-The value of the Signature header is created as specified in [section 3.1 of the above IETF draft](https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-15.html#section-3.1).
+The value of the Signature header is created as specified in [section 3.1 of the above IETF standard](https://www.rfc-editor.org/rfc/rfc9421.html#name-creating-a-signature).
 
 Depending on the cipher used, either of the following two sections applies:
 
-- [RSASSA-PKCS1-v1_5 using SHA-256](https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-15.html#section-3.3.2)
-- [EdDSA using curve edwards25519](https://www.ietf.org/archive/id/draft-ietf-httpbis-message-signatures-15.html#section-3.3.5)
+- [RSASSA-PKCS1-v1_5 using SHA-256](https://www.rfc-editor.org/rfc/rfc9421.html#name-rsassa-pkcs1-v1_5-using-sha)
+- [EdDSA using curve edwards25519](https://www.rfc-editor.org/rfc/rfc9421.html#name-eddsa-using-curve-edwards25)
 
-The test keys in this document are the same as those used in the IETF draft.
+The test keys in this document are the same as those used in the IETF standard.
 
 ## How to Test the Signature Mechanism
 
@@ -101,7 +101,7 @@ NOTE: The following samples include public keys in PEM format. However, they are
 
 The recommended signature cipher is “Ed25519” (Edwards Curve). As a fallback – in case an external developer's code framework doesn’t support this cipher – we also accept RSA. Ed25519 uses much shorter keys and will decrease the header size, which is why it is preferred over RSA.
 
-The following test keys can be used (Note: They are the same as the sample keys from the above cited IETF drafts).
+The following test keys can be used (Note: They are the same as the sample keys from the above cited IETF standards).
 
 Again, please note that you can only use the test keys and JWEs listed in the README, not one retrieved from the [Key Management API](https://developer.ebay.com/api-docs/developer/key-management/overview.html). These will only work on the ebay APIs.
 
